@@ -26,18 +26,40 @@ App.Screens.start = {
 //-----------------------------
 
 App.Screens.play = {
+  map: null, 
+
   enter: function() {
     console.log("entered Screen.play");
+    var tiles = [];
+    for (var x=0; x<App.width; x++) {
+      tiles.push([]);
+      for (var y=0; y<App.height; y++) {
+        tiles[x].push(App.Tile.null);
+      }
+    }
+    var generator = new ROT.Map.Cellular(App.width, App.height);
+    generator.randomize(0.5);
+    var iterations = 3;   //<- more = smoother
+    for (var i=0; i<iterations-1; i++) { generator.create(); }
+    generator.create(function(x, y, value) {
+      tiles[x][y] = value===1 ? App.Tiles.floor : App.Tiles.wall;
+    });
+    this.map = new App.Map(tiles); 
   },
-  exit:  function() {
+
+  exit: function() {
     console.log("exited Screen.play");
   },
+
   render: function(display) {
-    display.drawText(1,1, "%c{magenta}Play Screen");
-    display.drawText(1,2, "press [Escape] to %c{yellow}start over");
-    display.drawText(1,3, "press [Enter] to %c{green}win");
-    display.drawText(1,4, "press anything else to %c{red}lose");
+    for (var x=0; x<this.map.width; x++) {
+      for (var y=0; y<this.map.height; y++) {
+        var glyph = this.map.getTile(x,y).glyph;
+        display.draw(x, y, glyph.ch, glyph.fg, glyph.bg);
+      }
+    }
   },
+
   handleInput: function(keyCode) {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.win);

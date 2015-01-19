@@ -1,13 +1,15 @@
 
 var App = {
 
+  width:   80,
+  height:  24,
   display: null,
   screen:  null,
   Screens: {},
   Tiles:   {},
 
   init: function() {
-    this.display = new ROT.Display({width:80, height:24});
+    this.display = new ROT.Display({width:this.width, height:this.height});
     document.body.appendChild(this.display.getContainer());
     window.addEventListener('keydown', function(e) { App.screen.handleInput(e.keyCode); });
     this.createTiles();
