@@ -2,26 +2,35 @@
 
 var App = {
 
-  display:  null,
+  display: null,
+  screen:  null,
 
-  init: function(mapWidth, mapHeight) {
-    this.display = new ROT.Display({width:mapWidth, height:mapHeight});
+  init: function() {
+    this.display = new ROT.Display({width:80, height:24});
     document.body.appendChild(this.display.getContainer());
+    this._initEventHandlers();
+    this.screen = App.Screens.start;
+    this.screen.enter();
     this.draw();
   },
 
   draw: function() {
-    var fg, bg, colors;
-    for (var i=0; i<15; i++) {
-      var factor = i*20;
-      var gray   = 255-factor;
-      fg = ROT.Color.toRGB([gray, gray, gray]);
-      bg = ROT.Color.toRGB([factor, factor, factor]);
-      colors = "%c{"+ fg +"}%b{"+ bg +"}";
-      this.display.drawText(2, i, colors +"hello there");
-    }
-  }
+    this.screen.render(this.display); 
+  },
 
+  switchScreen: function(screen) {
+    if (this.screen != null) { this.screen.exit(); }
+    this.display.clear();
+    this.screen = screen;
+    this.screen.enter();
+    this.screen.render(this.display);
+  },
+
+  _initEventHandlers: function() {
+    window.addEventListener('keydown', function(e) {
+      App.screen.handleInput('keydown', e);
+    });
+  }
 
 };
 
