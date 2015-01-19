@@ -4,18 +4,22 @@
 //-----------------------------
 
 App.Screens.play = {
-  map: null, 
+  map:     null,
+  centerX: 0,
+  centerY: 0, 
 
   enter: function() {
     console.log("entered Screen.play");
-    var tiles = [];
-    for (var x=0; x<App.width; x++) {
+    var mapWidth  = 500;
+    var mapHeight = 500;
+    var tiles     = [];
+    for (var x=0; x<mapWidth; x++) {
       tiles.push([]);
-      for (var y=0; y<App.height; y++) {
+      for (var y=0; y<mapHeight; y++) {
         tiles[x].push(App.Tile.null);
       }
     }
-    var generator = new ROT.Map.Cellular(App.width, App.height);
+    var generator = new ROT.Map.Cellular(mapWidth, mapHeight);
     generator.randomize(0.5);
     var iterations = 3;   //<- more = smoother
     for (var i=0; i<iterations-1; i++) { generator.create(); }
@@ -30,22 +34,39 @@ App.Screens.play = {
   },
 
   render: function(display) {
-    for (var x=0; x<this.map.width; x++) {
-      for (var y=0; y<this.map.height; y++) {
+    var topLeftX = Math.max(0, this.centerX-(App.width/2));
+    topLeftX     = Math.min(topLeftX, this.map.width-App.width);
+    var topLeftY = Math.max(0, this.centerY-(App.height/2));
+    topLeftY     = Math.min(topLeftY, this.map.height-App.height);
+    for (var x=topLeftX; x<topLeftX+App.width; x++) {
+      for (var y=topLeftY; y<topLeftY+App.height; y++) {
         var glyph = this.map.getTile(x,y).glyph;
-        display.draw(x, y, glyph.ch, glyph.fg, glyph.bg);
+        display.draw(x-topLeftX, y-topLeftY, glyph.ch, glyph.fg, glyph.bg);
       }
     }
+    display.draw(this.centerX-topLeftX, this.centerY-topLeftY, '@', 'white', 'black');
   },
 
   handleInput: function(keyCode) {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.win);
     } else if (keyCode === ROT.VK_ESCAPE) {
-      App.switchScreen(App.Screens.start);
-    } else {
       App.switchScreen(App.Screens.lose);
     }
+    if (keyCode === ROT.VK_LEFT) {
+      this._move(-1, 0);
+    } else if (keyCode === ROT.VK_RIGHT) {
+      this._move(1, 0);
+    } else if (keyCode === ROT.VK_UP) {
+      this._move(0, -1);
+    } else if (keyCode === ROT.VK_DOWN) {
+      this._move(0, 1);
+    }
+  },
+
+  _move: function(dirX, dirY) {
+    this.centerX = Math.max(0, Math.min(this.map.width-1,  this.centerX+dirX));
+    this.centerY = Math.max(0, Math.min(this.map.height-1, this.centerY+dirY));
   }
 };
 
