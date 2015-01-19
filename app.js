@@ -28,7 +28,7 @@ var App = {
 
   _initEventHandlers: function() {
     window.addEventListener('keydown', function(e) {
-      App.screen.handleInput('keydown', e);
+      App.screen.handleInput(e.keyCode);
     });
   }
 
