@@ -1,27 +1,5 @@
 
 //-----------------------------
-// start:
-//-----------------------------
-
-App.Screens.start = {
-  enter: function() {
-    console.log("entered Screen.start");
-  },
-  exit:  function() {
-    console.log("exited Screen.start");
-  },
-  render: function(display) {
-    display.drawText(1,1, "%c{yellow}Start Screen");
-    display.drawText(1,2, "Press [Enter] to start");
-  },
-  handleInput: function(keyCode) {
-    if (keyCode === ROT.VK_RETURN) {
-      App.switchScreen(App.Screens.play);
-    }
-  }
-};
-
-//-----------------------------
 // play:
 //-----------------------------
 
@@ -67,6 +45,28 @@ App.Screens.play = {
       App.switchScreen(App.Screens.start);
     } else {
       App.switchScreen(App.Screens.lose);
+    }
+  }
+};
+
+//-----------------------------
+// start:
+//-----------------------------
+
+App.Screens.start = {
+  enter: function() {
+    console.log("entered Screen.start");
+  },
+  exit:  function() {
+    console.log("exited Screen.start");
+  },
+  render: function(display) {
+    display.drawText(1,1, "%c{yellow}Start Screen");
+    display.drawText(1,2, "Press [Enter] to start");
+  },
+  handleInput: function(keyCode) {
+    if (keyCode === ROT.VK_RETURN) {
+      App.switchScreen(App.Screens.play);
     }
   }
 };
