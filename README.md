@@ -1,0 +1,2 @@
+# bitrot
+rot.js testing
