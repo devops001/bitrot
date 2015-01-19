@@ -48,10 +48,13 @@ App.Screens.play = {
   },
 
   handleInput: function(keyCode) {
+    var shouldRender = true;
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.win);
+      shouldRender = false;
     } else if (keyCode === ROT.VK_ESCAPE) {
       App.switchScreen(App.Screens.lose);
+      shouldRender = false;
     }
     if (keyCode === ROT.VK_LEFT) {
       this._move(-1, 0);
@@ -62,6 +65,7 @@ App.Screens.play = {
     } else if (keyCode === ROT.VK_DOWN) {
       this._move(0, 1);
     }
+    return shouldRender;
   },
 
   _move: function(dirX, dirY) {
@@ -89,6 +93,7 @@ App.Screens.start = {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.play);
     }
+    return false;
   }
 };
 
@@ -111,6 +116,7 @@ App.Screens.win = {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.play); 
     }
+    return false;
   }
 };
 
@@ -133,6 +139,7 @@ App.Screens.lose = {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.play); 
     }
+    return false;
   }
 };
 

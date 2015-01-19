@@ -11,7 +11,12 @@ var App = {
   init: function() {
     this.display = new ROT.Display({width:this.width, height:this.height});
     document.body.appendChild(this.display.getContainer());
-    window.addEventListener('keydown', function(e) { App.screen.handleInput(e.keyCode); });
+    window.addEventListener('keydown', function(e) { 
+      if (App.screen.handleInput(e.keyCode)) {
+        App.display.clear();
+        App.screen.render(App.display);
+      }
+    });
     this.createTiles();
     this.switchScreen(App.Screens.start);
   },
