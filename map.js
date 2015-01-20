@@ -12,3 +12,18 @@ App.Map.prototype.getTile = function(x, y) {
   return this.tiles[x][y] || App.Tiles.null;
 };
 
+App.Map.prototype.dig = function(x, y) {
+  if (this.getTile(x,y).isDiggable) {
+    this.tiles[x][y] = App.Tile.floor;
+  }
+};
+
+App.Map.prototype.getRandFloorPos = function() {
+  var x, y;
+  do { 
+    x = Math.floor(Math.random()*this.width);
+    y = Math.floor(Math.random()*this.height);
+  } while (this.getTile(x,y) != App.Tiles.floor);
+  return {x:x, y:y};
+};
+

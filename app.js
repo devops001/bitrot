@@ -12,7 +12,7 @@ var App = {
     document.body.appendChild(this.display.getContainer());
     window.addEventListener('keydown', function(e) { 
       if (App.screen.handleInput(e.keyCode)) {
-        //App.display.clear();
+        App.display.clear();
         App.screen.render(App.display);
       }
     });
@@ -39,15 +39,7 @@ var App = {
     this.ch    = properties.ch || ' ';
     this.fg    = properties.fg || 'white';
     this.bg    = properties.bg || 'black';
-  },
-
-  Tile: function(properties) {
-    properties = properties || {};
-    App.Glyph.call(this, properties);
-    this.isWalkable = properties.isWalkable || false;
-    this.isDiggable = properties.isDiggable || false;
   }
-};
 
-App.Tile.extend(App.Glyph);
+};
 
