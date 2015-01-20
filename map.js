@@ -30,7 +30,7 @@ App.Map.prototype.getRandFloorPos = function() {
   return {x:x, y:y};
 };
 
-App.Map.prototype.getEntityAt(x, y) {
+App.Map.prototype.getEntityAt = function(x, y) {
   for (var i=0; i<this.entities.length; i++) {
     var entity = this.entities[i];
     if (entity.x==x && entity.y==y) {

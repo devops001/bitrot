@@ -63,21 +63,22 @@ App.Screens.play = {
       App.switchScreen(App.Screens.lose);
     }
     if (keyCode === ROT.VK_LEFT) {
-      return this._move(-1, 0);
+      this._move(-1, 0);
     } else if (keyCode === ROT.VK_RIGHT) {
-      return this._move(1, 0);
+      this._move(1, 0);
     } else if (keyCode === ROT.VK_UP) {
-      return this._move(0, -1);
+      this._move(0, -1);
     } else if (keyCode === ROT.VK_DOWN) {
-      return this._move(0, 1);
+      this._move(0, 1);
     }
-    return false;
   },
 
   _move: function(dirX, dirY) {
     var newX = Math.max(0, Math.min(this.map.width-1,  this.player.x + dirX));
     var newY = Math.max(0, Math.min(this.map.height-1, this.player.y + dirY));
-    return this.player.tryMove(newX, newY, this.map);
+    if (this.player.tryMove(newX, newY, this.map)) {
+      App.refresh();
+    }
   }
 };
 
@@ -100,7 +101,6 @@ App.Screens.start = {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.play);
     }
-    return false;
   }
 };
 
@@ -123,7 +123,6 @@ App.Screens.win = {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.play); 
     }
-    return false;
   }
 };
 
@@ -146,7 +145,6 @@ App.Screens.lose = {
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.play); 
     }
-    return false;
   }
 };
 
