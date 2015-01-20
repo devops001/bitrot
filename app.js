@@ -1,6 +1,5 @@
 
 var App = {
-
   width:   80,
   height:  24,
   display: null,
@@ -13,7 +12,7 @@ var App = {
     document.body.appendChild(this.display.getContainer());
     window.addEventListener('keydown', function(e) { 
       if (App.screen.handleInput(e.keyCode)) {
-        App.display.clear();
+        //App.display.clear();
         App.screen.render(App.display);
       }
     });
@@ -22,9 +21,9 @@ var App = {
   },
 
   createTiles: function() {
-    this.Tiles.null  = new App.Tile(new App.Glyph());
-    this.Tiles.floor = new App.Tile(new App.Glyph({ch:'.'}));
-    this.Tiles.wall  = new App.Tile(new App.Glyph({ch:'#', fg:'goldenrod'}));
+    this.Tiles.null  = new App.Tile({});
+    this.Tiles.floor = new App.Tile({ch:'.'});
+    this.Tiles.wall  = new App.Tile({ch:'#', fg:'goldenrod', isDiggable:true});
   },
 
   switchScreen: function(screen) {
@@ -35,16 +34,13 @@ var App = {
     this.screen.render(this.display);
   },
 
-  Glyph: function(properties) {
-    properties = properties || {};
-    this.ch    = properties.ch || ' ';
-    this.fg    = properties.fg || 'white';
-    this.bg    = properties.bg || 'black';
-  },
-
-  Tile: function(glyph) {
-    this.glyph = glyph;
+  Tile: function(properties) {
+    properties      = properties            || {};
+    this.ch         = properties.ch         || ' ';
+    this.fg         = properties.fg         || 'white';
+    this.bg         = properties.bg         || 'black';
+    this.isWalkable = properties.isWalkable || false;
+    this.isDiggable = properties.isDiggable || false;
   }
-
 };
 

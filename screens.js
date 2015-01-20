@@ -38,10 +38,14 @@ App.Screens.play = {
     topLeftX     = Math.min(topLeftX, this.map.width-App.width);
     var topLeftY = Math.max(0, this.centerY-(App.height/2));
     topLeftY     = Math.min(topLeftY, this.map.height-App.height);
-    for (var x=topLeftX; x<topLeftX+App.width; x++) {
-      for (var y=topLeftY; y<topLeftY+App.height; y++) {
-        var glyph = this.map.getTile(x,y).glyph;
-        display.draw(x-topLeftX, y-topLeftY, glyph.ch, glyph.fg, glyph.bg);
+
+    var stopX = topLeftX + App.width;
+    var stopY = topLeftY + App.height;
+
+    for (var x=topLeftX; x<stopX; x++) {
+      for (var y=topLeftY; y<stopY; y++) {
+        var tile = this.map.getTile(x,y);
+        display.draw(x-topLeftX, y-topLeftY, tile.ch, tile.fg, tile.bg);
       }
     }
     display.draw(this.centerX-topLeftX, this.centerY-topLeftY, '@', 'white', 'black');
