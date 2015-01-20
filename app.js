@@ -23,8 +23,8 @@ var App = {
 
   createTiles: function() {
     this.Tiles.null  = new App.Tile(new App.Glyph());
-    this.Tiles.floor = new App.Tile(new App.Glyph('.'));
-    this.Tiles.wall  = new App.Tile(new App.Glyph('#', 'goldenrod'));
+    this.Tiles.floor = new App.Tile(new App.Glyph({ch:'.'}));
+    this.Tiles.wall  = new App.Tile(new App.Glyph({ch:'#', fg:'goldenrod'}));
   },
 
   switchScreen: function(screen) {
@@ -35,10 +35,11 @@ var App = {
     this.screen.render(this.display);
   },
 
-  Glyph: function(ch, fg, bg) {
-    this.ch = ch || ' ';
-    this.fg = fg || 'white';
-    this.bg = bg || 'black';
+  Glyph: function(properties) {
+    properties = properties || {};
+    this.ch    = properties.ch || ' ';
+    this.fg    = properties.fg || 'white';
+    this.bg    = properties.bg || 'black';
   },
 
   Tile: function(glyph) {
