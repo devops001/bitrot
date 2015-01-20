@@ -21,8 +21,8 @@ var App = {
   },
 
   createTiles: function() {
-    this.Tiles.null  = new App.Tile({});
-    this.Tiles.floor = new App.Tile({ch:'.'});
+    this.Tiles.null  = new App.Tile();
+    this.Tiles.floor = new App.Tile({ch:'.', isWalkable:true});
     this.Tiles.wall  = new App.Tile({ch:'#', fg:'goldenrod', isDiggable:true});
   },
 
