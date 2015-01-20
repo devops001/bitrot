@@ -4,14 +4,15 @@
 //-----------------------------
 
 App.Screens.play = {
-  map:     null,
-  centerX: 0,
-  centerY: 0, 
+  map:    null,
+  player: null,
 
   enter: function() {
     console.log("entered Screen.play");
     var mapWidth  = 500;
     var mapHeight = 500;
+
+    // create tiles (TODO: move this to Map):
     var tiles     = [];
     for (var x=0; x<mapWidth; x++) {
       tiles.push([]);
@@ -23,10 +24,16 @@ App.Screens.play = {
     generator.randomize(0.5);
     var iterations = 3;   //<- more = smoother
     for (var i=0; i<iterations-1; i++) { generator.create(); }
-    generator.create(function(x, y, value) {
-      tiles[x][y] = value===1 ? App.Tiles.floor : App.Tiles.wall;
-    });
+    generator.create(function(x, y, value) { tiles[x][y] = value===1 ? App.Tiles.floor : App.Tiles.wall; });
+    
+    // create map:
     this.map = new App.Map(tiles); 
+
+    // create player:
+    this.player   = new App.Entity(App.Templates.player);
+    var pos       = this.map.getRandFloorPos();
+    this.player.x = pos.x;
+    this.player.y = pos.y;
   },
 
   exit: function() {
@@ -34,10 +41,10 @@ App.Screens.play = {
   },
 
   render: function(display) {
-    var topLeftX = Math.max(0, this.centerX-(App.width/2));
-    topLeftX     = Math.min(topLeftX, this.map.width-App.width);
-    var topLeftY = Math.max(0, this.centerY-(App.height/2));
-    topLeftY     = Math.min(topLeftY, this.map.height-App.height);
+    var topLeftX = Math.max(0, this.player.x - (App.width/2));
+    topLeftX     = Math.min(topLeftX, this.map.width - App.width);
+    var topLeftY = Math.max(0, this.player.y - (App.height/2));
+    topLeftY     = Math.min(topLeftY, this.map.height - App.height);
 
     var stopX = topLeftX + App.width;
     var stopY = topLeftY + App.height;
@@ -48,7 +55,7 @@ App.Screens.play = {
         display.draw(x-topLeftX, y-topLeftY, tile.ch, tile.fg, tile.bg);
       }
     }
-    display.draw(this.centerX-topLeftX, this.centerY-topLeftY, '@', 'white', 'black');
+    display.draw(this.player.x-topLeftX, this.player.y-topLeftY, this.player.ch, this.player.fg, this.player.bg);
   },
 
   handleInput: function(keyCode) {
@@ -70,9 +77,9 @@ App.Screens.play = {
   },
 
   _move: function(dirX, dirY) {
-    this.centerX = Math.max(0, Math.min(this.map.width-1,  this.centerX+dirX));
-    this.centerY = Math.max(0, Math.min(this.map.height-1, this.centerY+dirY));
-    return true;
+    var newX = Math.max(0, Math.min(this.map.width-1,  this.player.x + dirX));
+    var newY = Math.max(0, Math.min(this.map.height-1, this.player.y + dirY));
+    return this.player.tryMove(newX, newY, this.map);
   }
 };
 

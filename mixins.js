@@ -10,6 +10,7 @@ App.Mixins.Moveable = {
     if (tile.isWalkable) {
       this.x = x;
       this.y = y;
+      return true;
     } else if (tile.isDiggable) {
       map.dig(x, y);
       return true;

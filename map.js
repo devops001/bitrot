@@ -14,7 +14,7 @@ App.Map.prototype.getTile = function(x, y) {
 
 App.Map.prototype.dig = function(x, y) {
   if (this.getTile(x,y).isDiggable) {
-    this.tiles[x][y] = App.Tile.floor;
+    this.tiles[x][y] = App.Tiles.floor;
   }
 };
 
