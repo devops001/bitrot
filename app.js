@@ -30,10 +30,9 @@ var App = {
 
   switchScreen: function(screen) {
     if (this.screen != null) { this.screen.exit(); }
-    this.display.clear();
     this.screen = screen;
     this.screen.enter();
-    this.screen.render(this.display);
+    this.refresh();
   },
 
   Glyph: function(properties) {
