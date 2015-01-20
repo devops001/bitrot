@@ -41,21 +41,19 @@ App.Screens.play = {
   },
 
   render: function(display) {
-    var topLeftX = Math.max(0, this.player.x - (App.width/2));
-    topLeftX     = Math.min(topLeftX, this.map.width - App.width);
-    var topLeftY = Math.max(0, this.player.y - (App.height/2));
-    topLeftY     = Math.min(topLeftY, this.map.height - App.height);
-
-    var stopX = topLeftX + App.width;
-    var stopY = topLeftY + App.height;
-
-    for (var x=topLeftX; x<stopX; x++) {
-      for (var y=topLeftY; y<stopY; y++) {
+    var startX = Math.max(0, this.player.x - (App.width/2));
+    startX     = Math.min(startX, this.map.width - App.width);
+    var startY = Math.max(0, this.player.y - (App.height/2));
+    startY     = Math.min(topLeftY, this.map.height - App.height);
+    var stopX  = startX + App.width;
+    var stopY  = startY + App.height;
+    for (var x=startX; x<stopX; x++) {
+      for (var y=startY; y<stopY; y++) {
         var tile = this.map.getTile(x,y);
-        display.draw(x-topLeftX, y-topLeftY, tile.ch, tile.fg, tile.bg);
+        display.draw(x-startX, y-startY, tile.ch, tile.fg, tile.bg);
       }
     }
-    display.draw(this.player.x-topLeftX, this.player.y-topLeftY, this.player.ch, this.player.fg, this.player.bg);
+    display.draw(this.player.x-startX, this.player.y-startY, this.player.ch, this.player.fg, this.player.bg);
   },
 
   handleInput: function(keyCode) {
