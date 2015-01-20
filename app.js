@@ -34,13 +34,20 @@ var App = {
     this.screen.render(this.display);
   },
 
+  Glyph: function(properties) {
+    properties = properties    || {};
+    this.ch    = properties.ch || ' ';
+    this.fg    = properties.fg || 'white';
+    this.bg    = properties.bg || 'black';
+  },
+
   Tile: function(properties) {
-    properties      = properties            || {};
-    this.ch         = properties.ch         || ' ';
-    this.fg         = properties.fg         || 'white';
-    this.bg         = properties.bg         || 'black';
+    properties = properties || {};
+    App.Glyph.call(this, properties);
     this.isWalkable = properties.isWalkable || false;
     this.isDiggable = properties.isDiggable || false;
   }
 };
+
+App.Tile.extend(App.Glyph);
 
