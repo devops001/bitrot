@@ -48,29 +48,27 @@ App.Screens.play = {
   },
 
   handleInput: function(keyCode) {
-    var shouldRender = true;
     if (keyCode === ROT.VK_RETURN) {
       App.switchScreen(App.Screens.win);
-      shouldRender = false;
     } else if (keyCode === ROT.VK_ESCAPE) {
       App.switchScreen(App.Screens.lose);
-      shouldRender = false;
     }
     if (keyCode === ROT.VK_LEFT) {
-      this._move(-1, 0);
+      return this._move(-1, 0);
     } else if (keyCode === ROT.VK_RIGHT) {
-      this._move(1, 0);
+      return this._move(1, 0);
     } else if (keyCode === ROT.VK_UP) {
-      this._move(0, -1);
+      return this._move(0, -1);
     } else if (keyCode === ROT.VK_DOWN) {
-      this._move(0, 1);
+      return this._move(0, 1);
     }
-    return shouldRender;
+    return false;
   },
 
   _move: function(dirX, dirY) {
     this.centerX = Math.max(0, Math.min(this.map.width-1,  this.centerX+dirX));
     this.centerY = Math.max(0, Math.min(this.map.height-1, this.centerY+dirY));
+    return true;
   }
 };
 
