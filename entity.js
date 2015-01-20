@@ -5,15 +5,19 @@ App.Entity = function(properties) {
   this.name   = properties.name   || '';
   this.x      = properties.x      || 0;
   this.y      = properties.y      || 0;
-  var mixins  = properties.mixins || [];
+  this.map    = null;
   this.mixins = {};
+  this.groups = {};
+
+  var mixins = properties.mixins || [];
   for (var i=0; i<mixins.length; i++) {
     for (var key in mixins[i]) {
       if (key != 'init' && key != 'name' && !this.hasOwnProperty(key)) {
         this[key] = mixins[i][key];
       }
     }
-    this.mixins[mixins[i].name] = true;
+    this.mixins[mixins[i].name]  = true;
+    this.groups[mixins[i].group] = true;
     if (mixins[i].init) {
       mixins[i].init.call(this, properties);
     }
@@ -26,8 +30,7 @@ App.Entity.prototype.hasMixin = function(mixin) {
   if (typeof mixin === 'object') {
     return this.mixins[mixin.name];
   } else {
-    return this.mixins[mixin];
+    return this.mixins[mixin] || this.groups[mixin];
   }
 }
-
 

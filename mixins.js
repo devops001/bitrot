@@ -1,10 +1,11 @@
 
 //------------------------------
-// Moveable:
+// Moveable group:
 //------------------------------
 
 App.Mixins.Moveable = {
-  name: 'Moveable',
+  name:  'Moveable',
+  group: 'Moveable',
   tryMove: function(x, y, map) {
     var tile = map.getTile(x,y);
     if (tile.isWalkable) {
