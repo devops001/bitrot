@@ -3,8 +3,8 @@
 // Moveable group:
 //------------------------------
 
-App.Mixins.Moveable = {
-  name:  'Moveable',
+App.Mixins.MoveablePlayer = {
+  name:  'MoveablePlayer',
   group: 'Moveable',
   tryMove: function(x, y, map) {
     var tile = map.getTile(x,y);
@@ -20,3 +20,14 @@ App.Mixins.Moveable = {
   }
 };
 
+//------------------------------
+// Actable group:
+//------------------------------
+
+App.Mixins.ActablePlayer = {
+  name:  'ActablePlayer',
+  group: 'Actable',
+  act: function() {
+  }
+};
+    
