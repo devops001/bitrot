@@ -40,3 +40,21 @@ App.Map.prototype.getEntityAt = function(x, y) {
   return null;
 };
 
+App.Map.prototype.addEntity = function(entity) {
+  if (entity.x<0 || entity.x>=this.width || entity.y<0 || entity.y<=this.height) {
+    throw new Error('addEntity: entity out of map bounds: '+ entity);
+  }
+  entity.map = this;
+  this.entities.push(entity);
+  if (entity.hasMixin('Acting')) {
+    this.scheduler.add(entity, true);
+  }
+};
+
+App.Map.prototype.addEntityAtRandPos = function(entity) {
+  var pos  = this.getRandFloorPos();
+  entity.x = pos.x;
+  entity.y = pos.y;
+  this.addEntity(entity);
+};
+
