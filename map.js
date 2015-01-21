@@ -26,7 +26,7 @@ App.Map.prototype.getRandFloorPos = function() {
   do { 
     x = Math.floor(Math.random()*this.width);
     y = Math.floor(Math.random()*this.height);
-  } while (this.getTile(x,y) != App.Tiles.floor);
+  } while (this.getTile(x,y) != App.Tiles.floor || this.getEntityAt(x,y));
   return {x:x, y:y};
 };
 
