@@ -1,11 +1,11 @@
 
 //------------------------------
-// Moveable group:
+// Moving group:
 //------------------------------
 
-App.Mixins.MoveablePlayer = {
-  name:  'MoveablePlayer',
-  group: 'Moveable',
+App.Mixins.Digger = {
+  name:  'Digger',
+  group: 'Moving',
   tryMove: function(x, y, map) {
     var tile = map.getTile(x,y);
     if (tile.isWalkable) {
@@ -21,13 +21,21 @@ App.Mixins.MoveablePlayer = {
 };
 
 //------------------------------
-// Actable group:
+// Acting group:
 //------------------------------
 
-App.Mixins.ActablePlayer = {
-  name:  'ActablePlayer',
-  group: 'Actable',
+App.Mixins.Player = {
+  name:  'Player',
+  group: 'Acting',
   act: function() {
+    App.refresh();
+    App.engine.lock(); 
   }
 };
-    
+
+App.Mixins.Fungus = {
+  name:  'Fungus',
+  group: 'Acting',
+  act: function() {}
+};
+
