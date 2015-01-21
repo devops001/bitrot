@@ -7,7 +7,6 @@ App.Mixins.Walker = {
   name:  'Walker',
   group: 'Moving',
   tryMove: function(x, y, map) {
-    console.log("in Walker.tryMove");
     var tile = map.getTile(x,y);
     if (tile.isWalkable) {
       this.x = x;
