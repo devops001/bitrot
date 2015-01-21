@@ -11,6 +11,7 @@ var App = {
 
   init: function() {
     this.display = new ROT.Display({width:this.width, height:this.height});
+    this.display.setOptions({width:App.width, fontSize:20, fontSytle:"bold", bg:"#a00"});
     document.body.appendChild(this.display.getContainer());
     window.addEventListener('keydown', function(e) { App.screen.handleInput(e.keyCode); });
     this.createTiles();
@@ -24,8 +25,8 @@ var App = {
 
   createTiles: function() {
     this.Tiles.null  = new App.Tile();
-    this.Tiles.floor = new App.Tile({ch:'.', isWalkable:true});
-    this.Tiles.wall  = new App.Tile({ch:'#', fg:'goldenrod', isDiggable:true});
+    this.Tiles.floor = new App.Tile({ch:'.', fg:'lightgray', isWalkable:true});
+    this.Tiles.wall  = new App.Tile({ch:'#', fg:'darkgray',  isDiggable:true});
   },
 
   switchScreen: function(screen) {
