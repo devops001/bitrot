@@ -3,16 +3,28 @@
 // Moving group:
 //------------------------------
 
-App.Mixins.Digger = {
-  name:  'Digger',
+App.Mixins.Walker = {
+  name:  'Walker',
   group: 'Moving',
   tryMove: function(x, y, map) {
+    console.log("in Walker.tryMove");
     var tile = map.getTile(x,y);
     if (tile.isWalkable) {
       this.x = x;
       this.y = y;
       return true;
-    } else if (tile.isDiggable) {
+    }
+    return false;
+  }
+};
+
+App.Mixins.Digger = {
+  name:  'Digger',
+  group: 'Moving',
+  tryMove: function(x, y, map) {
+    if (App.Mixins.Walker.tryMove.call(this, x, y, map)) {
+      return true;
+    } else if (map.getTile(x,y).isDiggable) {
       map.dig(x, y);
       return true;
     }
