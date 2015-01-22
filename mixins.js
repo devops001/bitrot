@@ -61,14 +61,12 @@ App.Mixins.Fungus = {
         // dx,dy are in range: [-1, 0, 1]
         var dx = Math.floor(Math.random()*3)-1;
         var dy = Math.floor(Math.random()*3)-1;
-        if (dx != 0 || dy != 0) {
-          if (this.map.isOpen(this.x+dx, this.y+dy)) {
-            var spawn = new App.Entity(App.Templates.fungus);
-            spawn.x = this.x+dx;
-            spawn.y = this.y+dy;
-            this.map.addEntity(spawn);
-            this.spawnsLeft--;
-          }
+        if (this.map.isOpen(this.x+dx, this.y+dy)) {
+          var spawn = new App.Entity(App.Templates.fungus);
+          spawn.x = this.x+dx;
+          spawn.y = this.y+dy;
+          this.map.addEntity(spawn);
+          this.spawnsLeft--;
         }
       }
     }
