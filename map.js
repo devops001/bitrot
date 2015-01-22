@@ -62,3 +62,18 @@ App.Map.prototype.addEntityAtRandPos = function(entity) {
   this.addEntity(entity);
 };
 
+App.Map.prototype.removeEntity = function(entity) {
+  for (var i=0; i<this.entities.length; i++) {
+    if (this.entities[i] == entity) {
+      this.entities.splice(i, 1);
+      break;
+    }
+  }
+  if (entity.hasMixin('Acting')) {
+    this.scheduler.remove(entity);
+  }
+};
+
+App.Map.prototype.isOpen = function(x, y) {
+  return this.getTile(x,y).isWalkable && !this.getEntityAt(x,y);
+};
