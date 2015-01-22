@@ -1,7 +1,7 @@
 
 var App = {
-  width:     80,
-  height:    24,
+  width:     40,
+  height:    20,
   display:   null,
   screen:    null,
   Screens:   {},
@@ -11,7 +11,7 @@ var App = {
 
   init: function() {
     this.display = new ROT.Display({width:this.width, height:this.height});
-    this.display.setOptions({width:App.width, fontSize:20, fontSytle:"bold", bg:"#a00"});
+    this.display.setOptions({width:App.width, fontSize:26, fontSytle:"bold", bg:"#a00"});
     document.body.appendChild(this.display.getContainer());
     window.addEventListener('keydown', function(e) { App.screen.handleInput(e.keyCode); });
     this.createTiles();
@@ -25,8 +25,8 @@ var App = {
 
   createTiles: function() {
     this.Tiles.null  = new App.Tile();
-    this.Tiles.floor = new App.Tile({ch:'.', fg:'lightgray', isWalkable:true});
-    this.Tiles.wall  = new App.Tile({ch:'#', fg:'darkgray',  isDiggable:true});
+    this.Tiles.floor = new App.Tile({ch:'.', fg:'#222', isWalkable:true});
+    this.Tiles.wall  = new App.Tile({ch:'#', fg:'#444',  isDiggable:true});
   },
 
   switchScreen: function(screen) {
