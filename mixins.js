@@ -113,3 +113,21 @@ App.Mixins.Attacker = {
     }
   }
 };
+
+//------------------------------
+// MessageReceiver group:
+//------------------------------
+
+App.Mixins.MessageReceiver = {
+  name:  'MessageReceiver',
+  group: 'MessageReceiving',
+  init:  function(template) {
+    this.messages = [];
+  },
+  receiveMessage: function(message) {
+    this.messages.push(message);
+  },
+  clearMessages: function() {
+    this.messages = [];
+  }
+}

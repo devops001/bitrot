@@ -36,6 +36,13 @@ var App = {
     this.refresh();
   },
 
+  sendMessage: function(receiver, message, args) {
+      if (receiver.hasMixin(App.Mixins.MessageReceiving)) {
+        if (args) { message = vsprintf(message, args); }
+        receiver.receiveMessage(message);
+      }
+  },
+
   Glyph: function(properties) {
     properties = properties    || {};
     this.ch    = properties.ch || ' ';
@@ -44,4 +51,3 @@ var App = {
   }
 
 };
-
