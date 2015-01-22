@@ -30,7 +30,7 @@ App.Map.prototype.getRandFloorPos = function() {
   do {
     x = Math.floor(Math.random()*this.width);
     y = Math.floor(Math.random()*this.height);
-  } while (this.isOpen(x, y));
+  } while (!this.isOpen(x, y));
   return {x:x, y:y};
 };
 
