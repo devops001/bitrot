@@ -6,8 +6,9 @@ App.Map = function(tiles, player) {
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
   this.entities  = [];
+  // add entities:
   this.addEntityAtRandPos(player);
-  for (var i=0; i<1000; i++) {
+  for (var i=0; i<50; i++) {
     this.addEntityAtRandPos(new App.Entity(App.Templates.fungus));
   }
 };

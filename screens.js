@@ -9,8 +9,8 @@ App.Screens.play = {
 
   enter: function() {
     console.log("entered Screen.play");
-    var mapWidth  = 500;
-    var mapHeight = 500;
+    var mapWidth  = 100;
+    var mapHeight = 100;
 
     // create tiles (TODO: move this to Map):
     var tiles     = [];
@@ -25,9 +25,9 @@ App.Screens.play = {
     var iterations = 1;   //<- more = smoother
     for (var i=0; i<iterations-1; i++) { generator.create(); }
     generator.create(function(x, y, value) { tiles[x][y] = value===1 ? App.Tiles.floor : App.Tiles.wall; });
-    
+
     this.player = new App.Entity(App.Templates.player);
-    this.map    = new App.Map(tiles, this.player); 
+    this.map    = new App.Map(tiles, this.player);
   },
 
   exit: function() {
@@ -73,7 +73,7 @@ App.Screens.play = {
     } else if (keyCode === ROT.VK_DOWN) {
       this._move(0, 1);
     }
-    this.map.engine.unlock(); 
+    this.map.engine.unlock();
   },
 
   _move: function(dirX, dirY) {
@@ -124,7 +124,7 @@ App.Screens.win = {
   },
   handleInput: function(keyCode) {
     if (keyCode === ROT.VK_RETURN) {
-      App.switchScreen(App.Screens.play); 
+      App.switchScreen(App.Screens.play);
     }
   }
 };
@@ -146,13 +146,7 @@ App.Screens.lose = {
   },
   handleInput: function(keyCode) {
     if (keyCode === ROT.VK_RETURN) {
-      App.switchScreen(App.Screens.play); 
+      App.switchScreen(App.Screens.play);
     }
   }
 };
-
-
-
-
-
-
