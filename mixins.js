@@ -7,7 +7,11 @@ App.Mixins.Walker = {
   name:  'Walker',
   group: 'Moving',
   tryMove: function(x, y, map) {
-    if (map.isOpen(x,y)) {
+    var target = map.getEntityAt(x,y);
+    if (target && target.hasMixin('Defending') && this.hasMixin('Attacking')) {
+      this.attack(target);
+      return true;
+    } else if (map.isOpen(x,y)) {
       this.x = x;
       this.y = y;
       return true;
@@ -63,6 +67,7 @@ App.Mixins.Defender = {
   takeDamage: function(attacker, amount) {
     this.hp -= amount;
     if (this.hp <= 0) {
+      console.log(attacker.name +" killed "+ this.name);
       this.map.removeEntity(this);
     }
   }
@@ -75,9 +80,9 @@ App.Mixins.Defender = {
 App.Mixins.Attacker = {
   name:  'Attacker',
   group: 'Attacking',
-  attack: function(target, amount) {
+  attack: function(target) {
     if (target.hasMixin('Defending')) {
-      target.takeDamage(this, amount);
+      target.takeDamage(this, 1);
     }
   }
 };
