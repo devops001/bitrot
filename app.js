@@ -37,10 +37,10 @@ var App = {
   },
 
   sendMessage: function(receiver, message, args) {
-      if (receiver.hasMixin(App.Mixins.MessageReceiving)) {
-        if (args) { message = vsprintf(message, args); }
-        receiver.receiveMessage(message);
-      }
+    if (receiver.hasMixin("MessageReceiving")) {
+      if (args) { message = vsprintf(message, args); }
+      receiver.receiveMessage(message);
+    }
   },
 
   Glyph: function(properties) {

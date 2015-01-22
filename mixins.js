@@ -86,10 +86,9 @@ App.Mixins.Defender = {
     this.defense = template.defense || 0;
   },
   takeDamage: function(attacker, amount) {
-    console.log(attacker.name +" hit "+ this.name +" for "+ amount +" damage");
     this.hp -= amount;
     if (this.hp <= 0) {
-      console.log(attacker.name +" killed "+ this.name);
+      App.sendMessage(attacker, "%s killed %s", [attacker.name, this.name]);
       this.map.removeEntity(this);
     }
   }
@@ -108,8 +107,9 @@ App.Mixins.Attacker = {
   attack: function(target) {
     if (target.hasMixin('Defending')) {
       var power  = Math.max(0, this.attackPower - target.defense);
-      var amount = 1 + Math.floor(Math.random() * power);
-      target.takeDamage(this, amount);
+      var damage = 1 + Math.floor(Math.random() * power);
+      App.sendMessage(this, "%s hits %s for %d damage", [this.name, target.name, damage]);
+      target.takeDamage(this, damage);
     }
   }
 };

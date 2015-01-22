@@ -11,7 +11,8 @@ App.Templates.player = {
     App.Mixins.Player,
     App.Mixins.Digger,
     App.Mixins.Defender,
-    App.Mixins.Attacker
+    App.Mixins.Attacker,
+    App.Mixins.MessageReceiver
   ]
 };
 
