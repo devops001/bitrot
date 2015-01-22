@@ -8,7 +8,7 @@ App.Map = function(tiles, player) {
   this.entities  = [];
   this.addEntityAtRandPos(player);
   for (var i=0; i<1000; i++) {
-    this.addEntityAtRandPos(new Entity(App.Templates.fungus));
+    this.addEntityAtRandPos(new App.Entity(App.Templates.fungus));
   }
 };
 
@@ -45,9 +45,8 @@ App.Map.prototype.getEntityAt = function(x, y) {
 };
 
 App.Map.prototype.addEntity = function(entity) {
-  console.log("addEntity: ", entity);
-  if (entity.x<0 || entity.x>=this.width || entity.y<0 || entity.y<=this.height) {
-    throw new Error('addEntity: entity out of map bounds: '+ entity);
+  if (entity.x<0 || entity.x>=this.width || entity.y<0 || entity.y>=this.height) {
+    throw new Error('addEntity: entity out of map bounds');
   }
   entity.map = this;
   this.entities.push(entity);

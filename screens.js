@@ -35,6 +35,7 @@ App.Screens.play = {
   },
 
   render: function(display) {
+    // tiles:
     var startX = Math.max(0, this.player.x - (App.width/2));
     startX     = Math.min(startX, this.map.width - App.width);
     var startY = Math.max(0, this.player.y - (App.height/2));
@@ -47,7 +48,12 @@ App.Screens.play = {
         display.draw(x-startX, y-startY, tile.ch, tile.fg, tile.bg);
       }
     }
-    display.draw(this.player.x-startX, this.player.y-startY, this.player.ch, this.player.fg, this.player.bg);
+
+    // entities: (draw in reverse order to draw player last/on top):
+    for (var i=this.map.entities.length-1; i>-1; i--) {
+      var entity = this.map.entities[i];
+      display.draw(entity.x-startX, entity.y-startY, entity.ch, entity.fg, entity.bg);
+    }
   },
 
   handleInput: function(keyCode) {

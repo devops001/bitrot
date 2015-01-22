@@ -47,6 +47,8 @@ App.Mixins.Player = {
 App.Mixins.Fungus = {
   name:  'Fungus',
   group: 'Acting',
-  act: function() {}
+  act: function() {
+    console.log("fungus act()");
+  }
 };
 

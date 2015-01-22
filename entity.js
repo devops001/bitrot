@@ -12,7 +12,7 @@ App.Entity = function(properties) {
   var mixins = properties.mixins || [];
   for (var i=0; i<mixins.length; i++) {
     for (var key in mixins[i]) {
-      if (key != 'init' && key != 'name' && !this.hasOwnProperty(key)) {
+      if (key!='init' && key!='name' && key!='group' && !this.hasOwnProperty(key)) {
         this[key] = mixins[i][key];
       }
     }
@@ -28,7 +28,7 @@ App.Entity.extend(App.Glyph);
 
 App.Entity.prototype.hasMixin = function(mixin) {
   if (typeof mixin === 'object') {
-    return this.mixins[mixin.name];
+    return this.mixins[mixin.name] || this.groups[mixin.name];
   } else {
     return this.mixins[mixin] || this.groups[mixin];
   }
