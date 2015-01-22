@@ -49,3 +49,35 @@ App.Mixins.Fungus = {
   act: function() {
   }
 };
+
+//------------------------------
+// Defending group:
+//------------------------------
+
+App.Mixins.Defender = {
+  name:  'Defender',
+  group: 'Defending',
+  init:  function() {
+    this.hp = 1;
+  },
+  takeDamage: function(attacker, amount) {
+    this.hp -= amount;
+    if (this.hp <= 0) {
+      this.map.removeEntity(this);
+    }
+  }
+};
+
+//------------------------------
+// Attacking group:
+//------------------------------
+
+App.Mixins.Attacker = {
+  name:  'Attacker',
+  group: 'Attacking',
+  attack: function(target, amount) {
+    if (target.hasMixin('Defending')) {
+      target.takeDamage(this, amount);
+    }
+  }
+};
