@@ -7,8 +7,7 @@ App.Mixins.Walker = {
   name:  'Walker',
   group: 'Moving',
   tryMove: function(x, y, map) {
-    var tile = map.getTile(x,y);
-    if (tile.isWalkable) {
+    if (map.isOpen(x,y)) {
       this.x = x;
       this.y = y;
       return true;
@@ -50,4 +49,3 @@ App.Mixins.Fungus = {
   act: function() {
   }
 };
-

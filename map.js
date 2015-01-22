@@ -27,10 +27,10 @@ App.Map.prototype.dig = function(x, y) {
 
 App.Map.prototype.getRandFloorPos = function() {
   var x, y;
-  do { 
+  do {
     x = Math.floor(Math.random()*this.width);
     y = Math.floor(Math.random()*this.height);
-  } while (this.getTile(x,y) != App.Tiles.floor || this.getEntityAt(x,y));
+  } while (this.isOpen(x, y));
   return {x:x, y:y};
 };
 
