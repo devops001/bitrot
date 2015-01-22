@@ -7,14 +7,16 @@ App.Mixins.Walker = {
   name:  'Walker',
   group: 'Moving',
   tryMove: function(x, y, map) {
-    var target = map.getEntityAt(x,y);
-    if (target && target.hasMixin('Defending') && this.hasMixin('Attacking')) {
-      this.attack(target);
-      return true;
-    } else if (map.isOpen(x,y)) {
+    if (map.isOpen(x,y)) {
       this.x = x;
       this.y = y;
       return true;
+    } else {
+      var target = map.getEntityAt(x,y);
+      if (target && target.hasMixin('Defending') && this.hasMixin('Attacking')) {
+        this.attack(target);
+        return true;
+      }
     }
     return false;
   }
