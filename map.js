@@ -1,11 +1,15 @@
 
-App.Map = function(tiles) {
+App.Map = function(tiles, player) {
   this.tiles     = tiles;
   this.width     = tiles.length;
   this.height    = tiles[0].length;
-  this.entities  = [];
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
+  this.entities  = [];
+  this.addEntityAtRandPos(player);
+  for (var i=0; i<1000; i++) {
+    this.addEntityAtRandPos(new Entity(App.Templates.fungus));
+  }
 };
 
 App.Map.prototype.getTile = function(x, y) {
@@ -41,6 +45,7 @@ App.Map.prototype.getEntityAt = function(x, y) {
 };
 
 App.Map.prototype.addEntity = function(entity) {
+  console.log("addEntity: ", entity);
   if (entity.x<0 || entity.x>=this.width || entity.y<0 || entity.y<=this.height) {
     throw new Error('addEntity: entity out of map bounds: '+ entity);
   }

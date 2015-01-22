@@ -26,14 +26,8 @@ App.Screens.play = {
     for (var i=0; i<iterations-1; i++) { generator.create(); }
     generator.create(function(x, y, value) { tiles[x][y] = value===1 ? App.Tiles.floor : App.Tiles.wall; });
     
-    // create map:
-    this.map = new App.Map(tiles); 
-
-    // create player:
-    this.player   = new App.Entity(App.Templates.player);
-    var pos       = this.map.getRandFloorPos();
-    this.player.x = pos.x;
-    this.player.y = pos.y;
+    this.player = new App.Entity(App.Templates.player);
+    this.map    = new App.Map(tiles, this.player); 
   },
 
   exit: function() {
