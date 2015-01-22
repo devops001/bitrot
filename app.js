@@ -11,7 +11,7 @@ var App = {
 
   init: function() {
     this.display = new ROT.Display({width:this.width, height:this.height});
-    this.display.setOptions({width:App.width, fontSize:26, fontSytle:"bold", bg:"#a00"});
+    this.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#a00"});
     document.body.appendChild(this.display.getContainer());
     window.addEventListener('keydown', function(e) { App.screen.handleInput(e.keyCode); });
     this.createTiles();
