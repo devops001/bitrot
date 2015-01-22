@@ -80,10 +80,13 @@ App.Mixins.Fungus = {
 App.Mixins.Defender = {
   name:  'Defender',
   group: 'Defending',
-  init:  function() {
-    this.hp = 1;
+  init:  function(template) {
+    this.maxHP   = template.maxHP   || 10;
+    this.hp      = template.hp      || this.maxHP;
+    this.defense = template.defense || 0;
   },
   takeDamage: function(attacker, amount) {
+    console.log(attacker.name +" hit "+ this.name +" for "+ amount +" damage");
     this.hp -= amount;
     if (this.hp <= 0) {
       console.log(attacker.name +" killed "+ this.name);
@@ -99,9 +102,14 @@ App.Mixins.Defender = {
 App.Mixins.Attacker = {
   name:  'Attacker',
   group: 'Attacking',
+  init:   function(template) {
+    this.attackPower = template.attackPower || 1;
+  },
   attack: function(target) {
     if (target.hasMixin('Defending')) {
-      target.takeDamage(this, 1);
+      var power  = Math.max(0, this.attackPower - target.defense);
+      var amount = 1 + Math.floor(Math.random() * power);
+      target.takeDamage(this, amount);
     }
   }
 };
