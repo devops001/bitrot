@@ -52,7 +52,9 @@ App.Screens.play = {
     // entities: (draw in reverse order to draw player last/on top):
     for (var i=this.map.entities.length-1; i>-1; i--) {
       var entity = this.map.entities[i];
-      display.draw(entity.x-startX, entity.y-startY, entity.ch, entity.fg, entity.bg);
+      if (entity.x>=startX && entity.x<stopX && entity.y>=startY && entity.y<stopY) {
+        display.draw(entity.x-startX, entity.y-startY, entity.ch, entity.fg, entity.bg);
+      }
     }
   },
 
