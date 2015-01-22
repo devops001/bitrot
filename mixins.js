@@ -40,7 +40,7 @@ App.Mixins.Player = {
   group: 'Acting',
   act: function() {
     App.refresh();
-    App.engine.lock(); 
+    App.Screens.play.map.engine.lock();
   }
 };
 
@@ -48,7 +48,6 @@ App.Mixins.Fungus = {
   name:  'Fungus',
   group: 'Acting',
   act: function() {
-    console.log("fungus act()");
   }
 };
 

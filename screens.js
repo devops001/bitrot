@@ -73,6 +73,7 @@ App.Screens.play = {
     } else if (keyCode === ROT.VK_DOWN) {
       this._move(0, 1);
     }
+    this.map.engine.unlock(); 
   },
 
   _move: function(dirX, dirY) {
