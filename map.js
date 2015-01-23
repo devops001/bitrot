@@ -19,7 +19,7 @@ App.Map = function(tiles, player) {
   }
 };
 
-// tiles:
+// tiles & tile positions:
 
 App.Map.prototype.getTile = function(x, y) {
   if (x<0 || x>=this.width || y<0 || y>=this.height) {
@@ -46,6 +46,17 @@ App.Map.prototype.dig = function(x, y) {
 App.Map.prototype.isOpen = function(x, y) {
   return this.getTile(x,y).isWalkable && !this.getEntityAt(x,y);
 };
+
+App.Map.prototype.getAllPosAround = function(x, y) {
+  var positions = [];
+  for (var dx=-1; dx<2; dx++) {
+    for (var dy=-1; dy<2; dy++) {
+      if (dx==0 && dy==0) { continue; }
+      positions.push({x:x+dx, y:y+dy});
+    }
+  }
+  return positions.randomize();
+}
 
 // entities:
 
