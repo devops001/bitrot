@@ -9,7 +9,13 @@ App.Map = function(tiles, player) {
   // add entities:
   this.addEntityAtRandPos(player);
   for (var i=0; i<50; i++) {
-    this.addEntityAtRandPos(new App.Entity(App.Templates.fungus));
+    var fungus;
+    if (Math.random()>0.25) {
+      fungus = new App.Entity(App.Templates.fungus);
+    } else {
+      fungus = new App.Entity(App.Templates.poisonousFungus);
+    }
+    this.addEntityAtRandPos(fungus);
   }
 };
 

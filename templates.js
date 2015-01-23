@@ -27,3 +27,16 @@ App.Templates.fungus = {
     App.Mixins.Defender
   ]
 };
+
+App.Templates.poisonousFungus = {
+  name: 'poisonousFungus',
+  ch:   'P',
+  fg:   'red',
+  maxHP: 15,
+  defense: 0,
+  mixins: [
+    App.Mixins.Fungus,
+    App.Mixins.PoisonousDefender
+  ]
+};
+

@@ -46,6 +46,10 @@ App.Mixins.Player = {
   act: function() {
     App.refresh();
     App.Screens.play.map.engine.lock();
+    for (var i=0; i<this.messages.length; i++) {
+      console.log(this.messages[i]);
+    }
+    this.messages = [];
   }
 };
 
@@ -87,9 +91,30 @@ App.Mixins.Defender = {
   },
   takeDamage: function(attacker, amount) {
     this.hp -= amount;
+    App.sendMessage(this, "You took %d damage from %s. hp: %d/%d", [amount, attacker.name, this.hp, this.maxHP]);
     if (this.hp <= 0) {
-      App.sendMessage(attacker, "%s killed %s", [attacker.name, this.name]);
-      this.map.removeEntity(this);
+      App.sendMessage(attacker, "You killed %s", [this.name]);
+      App.sendMessage(this, "You died!");
+      if (this.name == "player") {
+        App.switchScreen(App.Screens.lose);
+      } else {
+        this.map.removeEntity(this);
+      }
+    }
+  }
+};
+
+App.Mixins.PoisonousDefender = {
+  name:  'PoisonousDefender',
+  group: 'Defending',
+  init:  function(template) {
+    App.Mixins.Defender.init.call(this, template);
+    this.poisonStrength = 10;
+  },
+  takeDamage: function(attacker, amount) {
+    App.Mixins.Defender.takeDamage.call(this, attacker, amount);  
+    if (attacker.hasMixin("Defending") && !attacker.hasMixin("PoisonousDefender")) {
+      attacker.takeDamage(this, this.poisonStrength);
     }
   }
 };
@@ -108,7 +133,7 @@ App.Mixins.Attacker = {
     if (target.hasMixin('Defending')) {
       var power  = Math.max(0, this.attackPower - target.defense);
       var damage = 1 + Math.floor(Math.random() * power);
-      App.sendMessage(this, "%s hits %s for %d damage", [this.name, target.name, damage]);
+      App.sendMessage(this, "You hit %s for %d damage", [target.name, damage]);
       target.takeDamage(this, damage);
     }
   }
