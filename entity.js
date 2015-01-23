@@ -5,6 +5,7 @@ App.Entity = function(properties) {
   this.name   = properties.name   || '';
   this.x      = properties.x      || 0;
   this.y      = properties.y      || 0;
+  this.z      = properties.z      || 0;
   this.map    = null;
   this.mixins = {};
   this.groups = {};
@@ -32,5 +33,10 @@ App.Entity.prototype.hasMixin = function(mixin) {
   } else {
     return this.mixins[mixin] || this.groups[mixin];
   }
-}
+};
 
+App.Entity.prototype.setPosition = function(x, y, z) {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+};
