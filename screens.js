@@ -23,7 +23,7 @@ App.Screens.play = {
     }
     var generator = new ROT.Map.Cellular(mapWidth, mapHeight);
     generator.randomize(0.5);
-    var iterations = 1;   //<- more = smoother
+    var iterations = 10;   //<- more = smoother
     for (var i=0; i<iterations-1; i++) { generator.create(); }
     generator.create(function(x, y, value) { tiles[x][y] = value===1 ? App.Tiles.floor : App.Tiles.wall; });
 
