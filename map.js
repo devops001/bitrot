@@ -28,7 +28,7 @@ App.Map.prototype.getTile = function(x, y) {
   return this.tiles[x][y] || App.Tiles.null;
 };
 
-App.Map.prototype.getRandFloorPos = function() {
+App.Map.prototype.getRandOpenPos = function() {
   var x, y;
   do {
     x = Math.floor(Math.random()*this.width);
@@ -82,7 +82,7 @@ App.Map.prototype.addEntity = function(entity) {
 };
 
 App.Map.prototype.addEntityAtRandPos = function(entity) {
-  var pos  = this.getRandFloorPos();
+  var pos  = this.getRandOpenPos();
   entity.x = pos.x;
   entity.y = pos.y;
   this.addEntity(entity);
