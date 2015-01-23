@@ -89,7 +89,7 @@ App.Mixins.Defender = {
   },
   takeDamage: function(attacker, amount) {
     this.hp -= amount;
-    App.sendMessage(this, "You took %d damage from %s. hp: %d/%d", [amount, attacker.name, this.hp, this.maxHP]);
+    App.sendMessage(this, "You took %d damage from %s", [amount, attacker.name]);
     if (this.hp <= 0) {
       App.sendMessage(attacker, "You killed %s", [this.name]);
       App.sendMessage(this, "You died!");
