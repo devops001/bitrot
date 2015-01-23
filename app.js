@@ -55,6 +55,17 @@ var App = {
     }
   },
 
+  getPositionsAround: function(x, y) {
+    var positions = [];
+    for (var dx=-1; dx<2; dx++) {
+      for (var dy=-1; dy<2; dy++) {
+        if (dx==0 && dy==0) { continue; }
+        positions.push({x:x+dx, y:y+dy});
+      }
+    }
+    return positions.randomize();
+  },
+
   Glyph: function(properties) {
     properties = properties    || {};
     this.ch    = properties.ch || ' ';
