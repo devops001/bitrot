@@ -49,7 +49,7 @@ App.Mixins.Player = {
     for (var i=0; i<this.messages.length; i++) {
       console.log(this.messages[i]);
     }
-    this.messages = [];
+    this.clearMessages();
   }
 };
 
