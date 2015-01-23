@@ -9,6 +9,7 @@ App.Screens.play = {
 
   enter: function() {
     console.log("entered Screen.play");
+    App.display.setOptions({fontSize:28, fontSytle:"bold", bg:"#000"});
     var mapWidth  = 100;
     var mapHeight = 100;
 
@@ -56,6 +57,17 @@ App.Screens.play = {
         display.draw(entity.x-startX, entity.y-startY, entity.ch, entity.fg, entity.bg);
       }
     }
+
+    // messages:
+    var msgY = 0;
+    for (var i=0; i<this.player.messages.length; i++) {
+      msgY += display.drawText(0, msgY, '%c{white}%b{black}' + this.player.messages[i]);
+    }
+
+    // stats:
+    var stats = '%c{white}%b{black}';
+    stats += vsprintf('HP: %d/%d ', [this.player.hp, this.player.maxHP]);
+    display.drawText(0, App.height, stats);
   },
 
   handleInput: function(keyCode) {
@@ -92,6 +104,7 @@ App.Screens.play = {
 App.Screens.start = {
   enter: function() {
     console.log("entered Screen.start");
+    App.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#00a"});
   },
   exit:  function() {
     console.log("exited Screen.start");
@@ -114,6 +127,7 @@ App.Screens.start = {
 App.Screens.win = {
   enter: function() {
     console.log("entered Screen.win");
+    App.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#0a0"});
   },
   exit: function() {
     console.log("exited Screen.win");
@@ -136,6 +150,7 @@ App.Screens.win = {
 App.Screens.lose = {
   enter: function() {
     console.log("entered Screen.lose");
+    App.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#a00"});
   },
   exit: function() {
     console.log("exited Screen.lose");

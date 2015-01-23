@@ -46,9 +46,6 @@ App.Mixins.Player = {
   act: function() {
     App.refresh();
     App.Screens.play.map.engine.lock();
-    for (var i=0; i<this.messages.length; i++) {
-      console.log(this.messages[i]);
-    }
     this.clearMessages();
   }
 };
