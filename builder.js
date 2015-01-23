@@ -121,7 +121,7 @@ App.Builder.prototype.connectRegions = function(z, region1, region2) {
   }
   var pos = overlap[0];
   this.tiles[z][pos.x][pos.y]  = App.Tiles.stairsDown;
-  this.tiles[z+1]pos.x][pos.y] = App.Tiles.stairsUp;
+  this.tiles[z+1][pos.x][pos.y] = App.Tiles.stairsUp;
   return true;
 };
 
