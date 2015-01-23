@@ -19,17 +19,13 @@ App.Map = function(tiles, player) {
   }
 };
 
+// tiles:
+
 App.Map.prototype.getTile = function(x, y) {
   if (x<0 || x>=this.width || y<0 || y>=this.height) {
     return App.Tiles.null;
   }
   return this.tiles[x][y] || App.Tiles.null;
-};
-
-App.Map.prototype.dig = function(x, y) {
-  if (this.getTile(x,y).isDiggable) {
-    this.tiles[x][y] = App.Tiles.floor;
-  }
 };
 
 App.Map.prototype.getRandFloorPos = function() {
@@ -40,6 +36,18 @@ App.Map.prototype.getRandFloorPos = function() {
   } while (!this.isOpen(x, y));
   return {x:x, y:y};
 };
+
+App.Map.prototype.dig = function(x, y) {
+  if (this.getTile(x,y).isDiggable) {
+    this.tiles[x][y] = App.Tiles.floor;
+  }
+};
+
+App.Map.prototype.isOpen = function(x, y) {
+  return this.getTile(x,y).isWalkable && !this.getEntityAt(x,y);
+};
+
+// entities:
 
 App.Map.prototype.getEntityAt = function(x, y) {
   for (var i=0; i<this.entities.length; i++) {
@@ -81,6 +89,17 @@ App.Map.prototype.removeEntity = function(entity) {
   }
 };
 
-App.Map.prototype.isOpen = function(x, y) {
-  return this.getTile(x,y).isWalkable && !this.getEntityAt(x,y);
+App.Map.prototype.getEntitiesWithinRadius = function(x, y, radius) {
+  var entities = [];
+  var left   = x-radius;
+  var right  = x+radius;
+  var top    = y-radius;
+  var bottom = y+radius;
+  for (var i=0; i<this.entities.length; i++) {
+    var e = this.entities[i];
+    if (e.x>=left && e.x<=right && e.y>=top && e.y<=bottom) {
+      entities.push(e);
+    }
+  }
+  return entities;
 };

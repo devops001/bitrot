@@ -71,6 +71,7 @@ App.Mixins.Fungus = {
           spawn.y = this.y+dy;
           this.map.addEntity(spawn);
           this.spawnsLeft--;
+          App.sendMessageNear(this.map, this.x, this.y, "The fungus is spreading!");
         }
       }
     }
@@ -112,7 +113,7 @@ App.Mixins.PoisonousDefender = {
     this.poisonStrength = 10;
   },
   takeDamage: function(attacker, amount) {
-    App.Mixins.Defender.takeDamage.call(this, attacker, amount);  
+    App.Mixins.Defender.takeDamage.call(this, attacker, amount);
     if (attacker.hasMixin("Defending") && !attacker.hasMixin("PoisonousDefender")) {
       attacker.takeDamage(this, this.poisonStrength);
     }
@@ -140,7 +141,7 @@ App.Mixins.Attacker = {
 };
 
 //------------------------------
-// MessageReceiver group:
+// MessageReceiving group:
 //------------------------------
 
 App.Mixins.MessageReceiver = {

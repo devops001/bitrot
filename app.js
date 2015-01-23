@@ -43,6 +43,16 @@ var App = {
     }
   },
 
+  sendMessageNear: function(map, x, y, message, args) {
+    if (args) { message = vsprintf(message, args); }
+    var entities = map.getEntitiesWithinRadius(x, y, 5);
+    for (var i=0; i<entities.length; i++) {
+      if (entities[i].hasMixin("MessageReceiving")) {
+        this.sendMessage(entities[i], message);
+      }
+    }
+  },
+
   Glyph: function(properties) {
     properties = properties    || {};
     this.ch    = properties.ch || ' ';
