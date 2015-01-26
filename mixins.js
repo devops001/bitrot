@@ -6,13 +6,28 @@
 App.Mixins.Walker = {
   name:  'Walker',
   group: 'Moving',
-  tryMove: function(x, y, map) {
-    if (map.isOpen(x,y)) {
-      this.x = x;
-      this.y = y;
+  tryMove: function(x, y, z, map) {
+    var currentTile = map.getTile(this.x,this.y,this.z);
+    if (map.isOpen(x,y,z)) {
+      if (z > this.z) {
+        if (currentTile == App.Tiles.stairsUp) {
+          App.sendMessage(this, "You ascend to level %d", [z+1]);
+        } else {
+          App.sendMessage(this, "You can't go up there!");
+          return false;
+        }
+      } else if (z < this.z) {
+        if (currentTile == App.Tiles.stairsDown) {
+          App.sendMessage(this, "You descend to level %d", [z+1]);
+        } else {
+          App.sendMessage(this, "You can't go down there!");
+          return false;
+        }
+      }
+      this.setPosition(x,y,z);
       return true;
     } else {
-      var target = map.getEntityAt(x,y);
+      var target = map.getEntityAt(x,y,z);
       if (target && target.hasMixin('Defending') && this.hasMixin('Attacking')) {
         this.attack(target);
         return true;
@@ -25,11 +40,11 @@ App.Mixins.Walker = {
 App.Mixins.Digger = {
   name:  'Digger',
   group: 'Moving',
-  tryMove: function(x, y, map) {
-    if (App.Mixins.Walker.tryMove.call(this, x, y, map)) {
+  tryMove: function(x, y, z, map) {
+    if (App.Mixins.Walker.tryMove.call(this, x, y, z, map)) {
       return true;
-    } else if (map.getTile(x,y).isDiggable) {
-      map.dig(x, y);
+    } else if (map.getTile(x,y,z).isDiggable) {
+      map.dig(x,y,z);
       return true;
     }
     return false;
@@ -62,13 +77,12 @@ App.Mixins.Fungus = {
         // dx,dy are in range: [-1, 0, 1]
         var dx = Math.floor(Math.random()*3)-1;
         var dy = Math.floor(Math.random()*3)-1;
-        if (this.map.isOpen(this.x+dx, this.y+dy)) {
+        if (this.map.isOpen(this.x+dx, this.y+dy, this.z)) {
           var spawn = new App.Entity(App.Templates.fungus);
-          spawn.x = this.x+dx;
-          spawn.y = this.y+dy;
+          spawn.setPosition(this.x+dx, this.y+dy, this.z);
           this.map.addEntity(spawn);
           this.spawnsLeft--;
-          App.sendMessageNear(this.map, this.x, this.y, "The fungus is spreading!");
+          App.sendMessageNear(this.map, this.x, this.y, this.z, "The fungus is spreading!");
         }
       }
     }
