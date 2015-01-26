@@ -8,27 +8,10 @@ App.Mixins.Walker = {
   group: 'Moving',
   tryMove: function(x, y, z, map) {
     var currentTile = map.getTile(this.x,this.y,this.z);
-    var nextTile    = map.getTile(x,y,z);
     var target      = map.getEntityAt(x,y,z);
-    if (map.isOpen(x,y,z)) {
-      if (z < this.z) {
-        if (currentTile == App.Tiles.stairsUp) {
-          App.sendMessage(this, "You ascend to level %d", [z+1]);
-        } else {
-          App.sendMessage(this, "You can't go up there!");
-          return false;
-        }
-      } else if (z > this.z) {
-        if (currentTile == App.Tiles.stairsDown) {
-          App.sendMessage(this, "You descend to level %d", [z+1]);
-        } else {
-          App.sendMessage(this, "You can't go down there!");
-          return false;
-        }
-      }
-      this.setPosition(x,y,z);
-      return true;
-    } else if (target) {
+
+    // attacking?
+    if (target) {
       if (target.hasMixin('Defending') && this.hasMixin('Attacking')) {
         this.attack(target);
         return true;
@@ -36,10 +19,37 @@ App.Mixins.Walker = {
         App.sendMessage(this, "something is blocking that space that can't be attacked");
         return false;
       }
+    }
+    // going up?
+    if (z < this.z) {
+      if (currentTile == App.Tiles.stairsUp) {
+        App.sendMessage(this, "You ascend to level %d", [z+1]);
+        this.setPosition(x,y,z);
+        return true;
+      } else {
+        App.sendMessage(this, "You can't go up there!");
+        return false;
+      }
+    }
+    // going down?
+    if (z > this.z) {
+      if (currentTile == App.Tiles.stairsDown) {
+        App.sendMessage(this, "You descend to level %d", [z+1]);
+        this.setPosition(x,y,z);
+        return true;
+      } else {
+        App.sendMessage(this, "You can't go down there!");
+        return false;
+      }
+    }
+    // moving on same level:
+    if (map.isOpen(x,y,z)) {
+      this.setPosition(x,y,z);
+      return true;
     } else {
-      console.log("Walker: hit wall or out of bounds");
       return false;
     }
+
   }
 };
 
