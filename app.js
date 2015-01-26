@@ -13,7 +13,8 @@ var App = {
     this.display = new ROT.Display({width:this.width, height:this.height+1});
     this.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#fff"});
     document.body.appendChild(this.display.getContainer());
-    window.addEventListener('keydown', function(e) { App.screen.handleInput(e.keyCode); });
+    window.addEventListener('keydown',  function(e) { App.screen.handleInput(e.keyCode); });
+    window.addEventListener('keypress', function(e) { App.screen.handleInput(e.keyCode); });
     this.createTiles();
     this.switchScreen(App.Screens.start);
   },
