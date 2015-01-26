@@ -75,9 +75,8 @@ App.Screens.play = {
     var newX = this.player.x + dirX;
     var newY = this.player.y + dirY;
     var newZ = this.player.z + dirZ;
-    if (this.player.tryMove(newX, newY, newZ, this.map)) {
-      this.map.engine.unlock();
-    }
+    this.player.tryMove(newX, newY, newZ, this.map);
+    this.map.engine.unlock();
   }
 };
 

@@ -121,7 +121,7 @@ App.Builder.prototype.connectRegions = function(z, region1, region2) {
     return false;
   }
   var pos = overlap[0];
-  this.tiles[z][pos.x][pos.y]  = App.Tiles.stairsDown;
+  this.tiles[z][pos.x][pos.y]   = App.Tiles.stairsDown;
   this.tiles[z+1][pos.x][pos.y] = App.Tiles.stairsUp;
   return true;
 };
@@ -129,13 +129,14 @@ App.Builder.prototype.connectRegions = function(z, region1, region2) {
 App.Builder.prototype.connectAllRegions = function() {
   for (var z=0; z<this.depth-1; z++) {
     var connected = {};
-    var key;
+    var key, region1, region2;
     for (var x=0; x<this.width; x++) {
       for (var y=0; y<this.height; y++) {
-        key = this.regions[z][x][y] +","+ this.regions[z+1][x][y];
-        if (this.tiles[z][x][y]==App.Tiles.floor && this.tiles[z+1][x][y]==App.Tiles.floor && !connected[key]) {
-          this.connectRegions(z, this.regions[z][x][y], this.regions[z+1][x][y]);
-          connected[key] = true;
+        region1 = this.regions[z][x][y];
+        region2 = this.regions[z+1][x][y];
+        key     = region1 +","+ region2;
+        if (!connected[key]) {
+          connected[key] = this.connectRegions(z, region1, region2);
         }
       }
     }
