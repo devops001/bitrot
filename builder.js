@@ -5,7 +5,7 @@ App.Builder = function(width, height, depth) {
   this.depth   = depth;
   this.tiles   = new Array(depth);
   this.regions = new Array(depth);
-  // create tiles & regions:
+  // generate one level per depth/z:
   for (var z=0; z<depth; z++) {
     this.tiles[z]   = this.generateLevel();
     this.regions[z] = new Array(width);
@@ -16,10 +16,11 @@ App.Builder = function(width, height, depth) {
       }
     }
   }
-  // setup & connect regions:
+  // assign regions to groups each depth level:
   for (var z=0; z<depth; z++) {
     this.setupRegions(z);
   }
+  // connect regions on different levels with stairs:
   this.connectAllRegions();
 };
 
