@@ -7,16 +7,19 @@ App.Map = function(tiles, player) {
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
   this.entities  = [];
+  // add player:
+  this.addEntityAtRandPos(player, 0);
   // add entities:
-  this.addEntityAtRandPos(player);
-  for (var i=0; i<50; i++) {
-    var fungus;
-    if (Math.random()>0.25) {
-      fungus = new App.Entity(App.Templates.fungus);
-    } else {
-      fungus = new App.Entity(App.Templates.poisonousFungus);
+  for (var z=0; z<this.depth; z++) {
+    for (var i=0; i<20; i++) {
+      var fungus;
+      if (Math.random()>0.25) {
+        fungus = new App.Entity(App.Templates.fungus);
+      } else {
+        fungus = new App.Entity(App.Templates.poisonousFungus);
+      }
+      this.addEntityAtRandPos(fungus, z);
     }
-    this.addEntityAtRandPos(fungus);
   }
 };
 
@@ -73,10 +76,8 @@ App.Map.prototype.addEntity = function(entity) {
 };
 
 App.Map.prototype.addEntityAtRandPos = function(entity, z) {
-  var pos  = this.getRandOpenPos(z);
-  entity.x = pos.x;
-  entity.y = pos.y;
-  entity.z = pos.z;
+  var pos = this.getRandOpenPos(z);
+  entity.setPosition(pos.x, pos.y, pos.z);
   this.addEntity(entity);
 };
 

@@ -13,8 +13,11 @@ var App = {
     this.display = new ROT.Display({width:this.width, height:this.height+1});
     this.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#fff"});
     document.body.appendChild(this.display.getContainer());
-    window.addEventListener('keydown',  function(e) { App.screen.handleInput(e.keyCode); });
-    window.addEventListener('keypress', function(e) { App.screen.handleInput(e.keyCode); });
+    window.onkeypress = function(e) {
+      e = e || window.event;
+      var code = e.which==0 ? e.keyCode : e.which;
+      App.screen.handleInput(code);
+    }
     this.createTiles();
     this.switchScreen(App.Screens.start);
   },
@@ -46,9 +49,9 @@ var App = {
     }
   },
 
-  sendMessageNear: function(map, x, y, message, args) {
+  sendMessageNear: function(map, x, y, z, message, args) {
     if (args) { message = vsprintf(message, args); }
-    var entities = map.getEntitiesWithinRadius(x, y, 5);
+    var entities = map.getEntitiesWithinRadius(x, y, z, 5);
     for (var i=0; i<entities.length; i++) {
       if (entities[i].hasMixin("MessageReceiving")) {
         this.sendMessage(entities[i], message);
@@ -72,6 +75,16 @@ var App = {
     this.ch    = properties.ch || ' ';
     this.fg    = properties.fg || 'white';
     this.bg    = properties.bg || 'black';
-  }
+  },
+
+  KEY_UpArrow:    38,
+  KEY_DownArrow:  40,
+  KEY_LeftArrow:  37,
+  KEY_RightArrow: 39,
+  KEY_UpStairs:   60,
+  KEY_DownStairs: 62,
+  KEY_Space:      32,
+  KEY_Enter:      13,
+  KEY_Escape:     27
 
 };

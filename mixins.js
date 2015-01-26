@@ -8,15 +8,17 @@ App.Mixins.Walker = {
   group: 'Moving',
   tryMove: function(x, y, z, map) {
     var currentTile = map.getTile(this.x,this.y,this.z);
+    var nextTile    = map.getTile(x,y,z);
+    var target      = map.getEntityAt(x,y,z);
     if (map.isOpen(x,y,z)) {
-      if (z > this.z) {
+      if (z < this.z) {
         if (currentTile == App.Tiles.stairsUp) {
           App.sendMessage(this, "You ascend to level %d", [z+1]);
         } else {
           App.sendMessage(this, "You can't go up there!");
           return false;
         }
-      } else if (z < this.z) {
+      } else if (z > this.z) {
         if (currentTile == App.Tiles.stairsDown) {
           App.sendMessage(this, "You descend to level %d", [z+1]);
         } else {
@@ -26,14 +28,18 @@ App.Mixins.Walker = {
       }
       this.setPosition(x,y,z);
       return true;
-    } else {
-      var target = map.getEntityAt(x,y,z);
-      if (target && target.hasMixin('Defending') && this.hasMixin('Attacking')) {
+    } else if (target) {
+      if (target.hasMixin('Defending') && this.hasMixin('Attacking')) {
         this.attack(target);
         return true;
+      } else {
+        App.sendMessage(this, "something is blocking that space that can't be attacked");
+        return false;
       }
+    } else {
+      console.log("Walker: hit wall or out of bounds");
+      return false;
     }
-    return false;
   }
 };
 

@@ -10,25 +10,13 @@ App.Screens.play = {
   enter: function() {
     console.log("entered Screen.play");
     App.display.setOptions({fontSize:28, fontSytle:"bold", bg:"#000"});
-    var mapWidth  = 100;
-    var mapHeight = 100;
-
-    // create tiles (TODO: move this to Map):
-    var tiles     = [];
-    for (var x=0; x<mapWidth; x++) {
-      tiles.push([]);
-      for (var y=0; y<mapHeight; y++) {
-        tiles[x].push(App.Tile.null);
-      }
-    }
-    var generator = new ROT.Map.Cellular(mapWidth, mapHeight);
-    generator.randomize(0.5);
-    var iterations = 10;   //<- more = smoother
-    for (var i=0; i<iterations-1; i++) { generator.create(); }
-    generator.create(function(x, y, value) { tiles[x][y] = value===1 ? App.Tiles.floor : App.Tiles.wall; });
-
-    this.player = new App.Entity(App.Templates.player);
-    this.map    = new App.Map(tiles, this.player);
+    var mapDepth  = 3;
+    var mapWidth  = 50;
+    var mapHeight = 50;
+    var tiles     = new App.Builder(mapWidth, mapHeight, mapDepth).tiles;
+    this.player   = new App.Entity(App.Templates.player);
+    this.map      = new App.Map(tiles, this.player);
+    this.map.engine.start();
   },
 
   exit: function() {
@@ -45,16 +33,16 @@ App.Screens.play = {
     var stopY  = startY + App.height;
     for (var x=startX; x<stopX; x++) {
       for (var y=startY; y<stopY; y++) {
-        var tile = this.map.getTile(x,y);
+        var tile = this.map.getTile(x,y, this.player.z);
         display.draw(x-startX, y-startY, tile.ch, tile.fg, tile.bg);
       }
     }
 
     // entities: (draw in reverse order to draw player last/on top):
     for (var i=this.map.entities.length-1; i>-1; i--) {
-      var entity = this.map.entities[i];
-      if (entity.x>=startX && entity.x<stopX && entity.y>=startY && entity.y<stopY) {
-        display.draw(entity.x-startX, entity.y-startY, entity.ch, entity.fg, entity.bg);
+      var e = this.map.entities[i];
+      if (e.z==this.player.z && e.x>=startX && e.x<stopX && e.y>=startY && e.y<stopY) {
+        display.draw(e.x-startX, e.y-startY, e.ch, e.fg, e.bg);
       }
     }
 
@@ -70,29 +58,25 @@ App.Screens.play = {
     display.drawText(0, App.height, stats);
   },
 
-  handleInput: function(keyCode) {
-    if (keyCode === ROT.VK_RETURN) {
-      App.switchScreen(App.Screens.win);
-    } else if (keyCode === ROT.VK_ESCAPE) {
-      App.switchScreen(App.Screens.lose);
+  handleInput: function(code) {
+    switch(code) {
+    case App.KEY_Enter:      App.switchScreen(App.Screens.win); break;
+    case App.KEY_Escape:     App.switchScreen(App.Screens.lose); break;
+    case App.KEY_DownStairs: this.move(0,0, 1); break;
+    case App.KEY_UpStairs:   this.move(0,0,-1); break;
+    case App.KEY_LeftArrow:  this.move(-1,0,0); break;
+    case App.KEY_RightArrow: this.move( 1,0,0); break;
+    case App.KEY_DownArrow:  this.move(0, 1,0); break;
+    case App.KEY_UpArrow:    this.move(0,-1,0); break;
     }
-    if (keyCode === ROT.VK_LEFT) {
-      this._move(-1, 0);
-    } else if (keyCode === ROT.VK_RIGHT) {
-      this._move(1, 0);
-    } else if (keyCode === ROT.VK_UP) {
-      this._move(0, -1);
-    } else if (keyCode === ROT.VK_DOWN) {
-      this._move(0, 1);
-    }
-    this.map.engine.unlock();
   },
 
-  _move: function(dirX, dirY) {
-    var newX = Math.max(0, Math.min(this.map.width-1,  this.player.x + dirX));
-    var newY = Math.max(0, Math.min(this.map.height-1, this.player.y + dirY));
-    if (this.player.tryMove(newX, newY, this.map)) {
-      App.refresh();
+  move: function(dirX, dirY, dirZ) {
+    var newX = this.player.x + dirX;
+    var newY = this.player.y + dirY;
+    var newZ = this.player.z + dirZ;
+    if (this.player.tryMove(newX, newY, newZ, this.map)) {
+      this.map.engine.unlock();
     }
   }
 };
@@ -113,8 +97,8 @@ App.Screens.start = {
     display.drawText(1,1, "%c{yellow}Start Screen");
     display.drawText(1,2, "Press [Enter] to start");
   },
-  handleInput: function(keyCode) {
-    if (keyCode === ROT.VK_RETURN) {
+  handleInput: function(key) {
+    if (key === App.KEY_Enter) {
       App.switchScreen(App.Screens.play);
     }
   }
@@ -136,8 +120,8 @@ App.Screens.win = {
     display.drawText(1,1, "%c{green}Win Screen");
     display.drawText(1,2, "press [Enter] to play again");
   },
-  handleInput: function(keyCode) {
-    if (keyCode === ROT.VK_RETURN) {
+  handleInput: function(key) {
+    if (key === App.KEY_Enter) {
       App.switchScreen(App.Screens.play);
     }
   }
@@ -159,8 +143,8 @@ App.Screens.lose = {
     display.drawText(1,1, "%c{red}Lose Screen");
     display.drawText(1,2, "press [Enter] to play again");
   },
-  handleInput: function(keyCode) {
-    if (keyCode === ROT.VK_RETURN) {
+  handleInput: function(key) {
+    if (key === App.KEY_Enter) {
       App.switchScreen(App.Screens.play);
     }
   }

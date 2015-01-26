@@ -12,7 +12,7 @@ App.Builder = function(width, height, depth) {
     for (var x=0; x<width; x++) {
       this.regions[z][x] = new Array(height);
       for (var y=0; y<height; y++) {
-        this.regionx[z][x][y] = 0;
+        this.regions[z][x][y] = 0;
       }
     }
   }
