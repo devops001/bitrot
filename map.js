@@ -10,8 +10,9 @@ App.Map = function(tiles, player) {
   // add player:
   this.addEntityAtRandPos(player, 0);
   // add entities:
+  var numFungusPerLevel = 10;
   for (var z=0; z<this.depth; z++) {
-    for (var i=0; i<20; i++) {
+    for (var i=0; i<numFungusPerLevel; i++) {
       var fungus;
       if (Math.random()>0.25) {
         fungus = new App.Entity(App.Templates.fungus);

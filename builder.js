@@ -41,7 +41,7 @@ App.Builder.prototype.generateLevel = function(iterations) {
   return map;
 };
 
-App.Builder.prototype.canFillRegion = function(x, y, z) {
+App.Builder.prototype.canSetRegion = function(x, y, z) {
   if (x<0 || y<0 || z<0 || x>=this.width || y>=this.height || z>=this.depth) {
     return false;   //<- out of bounds
   }
@@ -55,20 +55,20 @@ App.Builder.prototype.fillRegion = function(region, x, y, z) {
   var tiles = [{x:x, y:y}];
   var tile, neighbors;
   var tilesFilled = 1;
-  this.regions[z][x][y] = region;
+  this.regions[z][x][y] = region;  //<- set region for first tile
   while (tiles.length > 0) {
     tile      = tiles.pop();
-    neighbors = App.getPositionsAround(x, y);
-  }
-  while (neighbors.length > 0) {
-    tile = neighbors.pop();
-    if (this.canFillRegion(tile.x, tile.y, z)) {
-      this.regions[z][tile.x][tile.y] = region;
-      tiles.push(tile);
-      tilesFilled++;
+    neighbors = App.getPositionsAround(tile.x, tile.y);
+    while (neighbors.length > 0) {
+      tile = neighbors.pop();
+      if (this.canSetRegion(tile.x, tile.y, z)) {
+        this.regions[z][tile.x][tile.y] = region;
+        tiles.push(tile);
+        tilesFilled++;
+      }
     }
   }
-  return tiles;
+  return tilesFilled;
 };
 
 App.Builder.prototype.removeRegion = function(region, z) {
@@ -88,7 +88,7 @@ App.Builder.prototype.setupRegions = function(z) {
   var tilesFilled;
   for (var x=0; x<this.width; x++) {
     for (var y=0; y<this.height; y++) {
-      if (this.canFillRegion(x,y,z)) {
+      if (this.canSetRegion(x,y,z)) {
         tilesFilled = this.fillRegion(region, x, y, z);
         if (tilesFilled < minimumRegionSize) {
           this.removeRegion(region, z);
