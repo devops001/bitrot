@@ -193,6 +193,6 @@ App.Mixins.Sight = {
   name:  'Sight',
   group: 'Seeing',
   init: function(template) {
-    this.sightRadius = template.sideRadius || 5;
+    this.sightRadius = template.sightRadius || 5;
   }
 };

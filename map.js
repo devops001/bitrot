@@ -42,7 +42,7 @@ App.Map.prototype.setupFov = function() {
       var depth = z;
       map.fov.push(
         new ROT.FOV.DiscreteShadowcasting(function(x,y) {
-          return !map.getTile(x,y,depth).blocksLight;
+          return map.getTile(x,y,depth).blocksLight;
         }, {topology:4})
       );
     })();

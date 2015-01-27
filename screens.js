@@ -24,17 +24,21 @@ App.Screens.play = {
   },
 
   render: function(display) {
+    var visible = this.getVisiblePositions();
+
     // tiles:
-    var startX = Math.max(0, this.player.x - (App.width/2));
-    startX     = Math.min(startX, this.map.width - App.width);
-    var startY = Math.max(0, this.player.y - (App.height/2));
-    startY     = Math.min(startY, this.map.height - App.height);
-    var stopX  = startX + App.width;
-    var stopY  = startY + App.height;
+    var startX  = Math.max(0, this.player.x - (App.width/2));
+    startX      = Math.min(startX, this.map.width - App.width);
+    var startY  = Math.max(0, this.player.y - (App.height/2));
+    startY      = Math.min(startY, this.map.height - App.height);
+    var stopX   = startX + App.width;
+    var stopY   = startY + App.height;
     for (var x=startX; x<stopX; x++) {
       for (var y=startY; y<stopY; y++) {
-        var tile = this.map.getTile(x,y, this.player.z);
-        display.draw(x-startX, y-startY, tile.ch, tile.fg, tile.bg);
+        if (visible[x+","+y]) {
+          var tile = this.map.getTile(x,y, this.player.z);
+          display.draw(x-startX, y-startY, tile.ch, tile.fg, tile.bg);
+        }
       }
     }
 
@@ -42,7 +46,9 @@ App.Screens.play = {
     for (var i=this.map.entities.length-1; i>-1; i--) {
       var e = this.map.entities[i];
       if (e.z==this.player.z && e.x>=startX && e.x<stopX && e.y>=startY && e.y<stopY) {
-        display.draw(e.x-startX, e.y-startY, e.ch, e.fg, e.bg);
+        if (visible[e.x+","+e.y]) {
+          display.draw(e.x-startX, e.y-startY, e.ch, e.fg, e.bg);
+        }
       }
     }
 
@@ -77,6 +83,17 @@ App.Screens.play = {
     var newZ = this.player.z + dirZ;
     this.player.tryMove(newX, newY, newZ, this.map);
     this.map.engine.unlock();
+  },
+
+  getVisiblePositions: function() {
+    // TODO: stop using strings as keys to be faster
+    var positions = {};
+    var x  = this.player.x;
+    var y  = this.player.y;
+    var sr = this.player.sightRadius;
+    var cb = function(x,y,radius,visibility) { positions[x+","+y]=true; };
+    this.map.fov[this.player.z].compute(x,y,sr,cb);
+    return positions;
   }
 };
 
