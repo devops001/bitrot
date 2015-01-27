@@ -29,10 +29,10 @@ var App = {
 
   createTiles: function() {
     this.Tiles.null       = new App.Tile();
-    this.Tiles.floor      = new App.Tile({ch:'.', fg:'#222', isWalkable:true});
-    this.Tiles.wall       = new App.Tile({ch:'#', fg:'#444', isDiggable:true});
-    this.Tiles.stairsUp   = new App.Tile({ch:'<', fg:'#fff', isWalkable:true});
-    this.Tiles.stairsDown = new App.Tile({ch:'>', fg:'#fff', isWalkable:true});
+    this.Tiles.floor      = new App.Tile({ch:'.', fg:'#222', isWalkable:true, blocksLight:false});
+    this.Tiles.wall       = new App.Tile({ch:'#', fg:'#444', isDiggable:true, blocksLight:true});
+    this.Tiles.stairsUp   = new App.Tile({ch:'<', fg:'#fff', isWalkable:true, blocksLight:false});
+    this.Tiles.stairsDown = new App.Tile({ch:'>', fg:'#fff', isWalkable:true, blocksLight:false});
   },
 
   switchScreen: function(screen) {
