@@ -21,7 +21,7 @@ App.Templates.player = {
 App.Templates.fungus = {
   name: 'fungus',
   ch:   'F',
-  fg:   'green',
+  fg:   '#0f0',
   maxHP:  15,
   defense: 0,
   mixins: [
@@ -32,8 +32,9 @@ App.Templates.fungus = {
 
 App.Templates.poisonousFungus = {
   name: 'poisonousFungus',
-  ch:   'P',
-  fg:   'red',
+  ch:   'F',
+  fg:   '#0f0',
+  bg:   '#200',
   maxHP: 15,
   defense: 0,
   mixins: [
