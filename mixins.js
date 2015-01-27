@@ -99,6 +99,8 @@ App.Mixins.Fungus = {
           this.map.addEntity(spawn);
           this.spawnsLeft--;
           App.sendMessageNear(this.map, this.x, this.y, this.z, "The fungus is spreading!");
+          // stop most spwans from spawning more or the level will completely fill:
+          if (Math.random() > 0.25) { spawn.spawnsLeft = 0; }
         }
       }
     }
