@@ -183,4 +183,16 @@ App.Mixins.MessageReceiver = {
   clearMessages: function() {
     this.messages = [];
   }
-}
+};
+
+//------------------------------
+// Seeing group:
+//------------------------------
+
+App.Mixins.Sight = {
+  name:  'Sight',
+  group: 'Seeing',
+  init: function(template) {
+    this.sightRadius = template.sideRadius || 5;
+  }
+};

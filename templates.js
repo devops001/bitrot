@@ -12,7 +12,8 @@ App.Templates.player = {
     App.Mixins.Digger,
     App.Mixins.Defender,
     App.Mixins.Attacker,
-    App.Mixins.MessageReceiver
+    App.Mixins.MessageReceiver,
+    App.Mixins.Sight
   ]
 };
 
@@ -39,4 +40,3 @@ App.Templates.poisonousFungus = {
     App.Mixins.PoisonousDefender
   ]
 };
-

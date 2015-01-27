@@ -4,13 +4,18 @@ App.Map = function(tiles, player) {
   this.depth     = tiles.length;
   this.width     = tiles[0].length;
   this.height    = tiles[0][0].length;
+  this.entities  = [];
+  this.fov       = [];
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
-  this.entities  = [];
-  // add player:
   this.addEntityAtRandPos(player, 0);
-  // add entities:
-  var numFungusPerLevel = 10;
+  this.addMobsToAllLevels(10);
+  this.setupFov();
+};
+
+// init:
+
+App.Map.prototype.addMobsToAllLevels = function(numFungusPerLevel) {
   for (var z=0; z<this.depth; z++) {
     for (var i=0; i<numFungusPerLevel; i++) {
       var fungus;
@@ -21,6 +26,26 @@ App.Map = function(tiles, player) {
       }
       this.addEntityAtRandPos(fungus, z);
     }
+  }
+};
+
+App.Map.prototype.setupFov = function() {
+  // TODO: test simple version:
+  //var map = this;
+  //for (var z=0; z<map.depth; z++) {
+    //var cb = function(x,y) { return !map.getTile(x,y,z).blocksLight; };
+    //map.fov.push(new ROT.FOV.DiscreteShadowcasting(cb, {topology:4}));
+  //}
+  var map = this;
+  for (var z=0; z<this.depth; z++) {
+    (function() {
+      var depth = z;
+      map.fov.push(
+        new ROT.FOV.DiscreteShadowcasting(function(x,y) {
+          return !map.getTile(x,y,depth).blocksLight;
+        }, {topology:4})
+      );
+    })();
   }
 };
 
