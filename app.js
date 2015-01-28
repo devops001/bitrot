@@ -29,8 +29,8 @@ var App = {
 
   createTiles: function() {
     this.Tiles.null       = new App.Tile();
-    this.Tiles.wall       = new App.Tile({ch:'#', fg:'#444', isDiggable:true, blocksLight:true});
-    this.Tiles.floor      = new App.Tile({ch:'.', fg:'#222', isWalkable:true, blocksLight:false});
+    this.Tiles.wall       = new App.Tile({ch:'#', fg:'#444', isDiggable:true, blocksLight:true,  bg:'#333'});
+    this.Tiles.floor      = new App.Tile({ch:'.', fg:'#222', isWalkable:true, blocksLight:false, bg:'#111'});
     this.Tiles.stairsUp   = new App.Tile({ch:'<', fg:'#fff', isWalkable:true, blocksLight:false});
     this.Tiles.stairsDown = new App.Tile({ch:'>', fg:'#fff', isWalkable:true, blocksLight:false});
   },

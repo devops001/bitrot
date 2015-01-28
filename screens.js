@@ -55,13 +55,17 @@ App.Screens.play = {
     // messages:
     var msgY = 0;
     for (var i=0; i<this.player.messages.length; i++) {
-      msgY += display.drawText(0, msgY, '%c{white}%b{black}' + this.player.messages[i]);
+      msgY += display.drawText(0, msgY, '%c{gray}%b{black}' + this.player.messages[i]);
     }
 
     // stats:
-    var stats = '%c{white}%b{black}';
-    stats += vsprintf('HP: %d/%d ', [this.player.hp, this.player.maxHP]);
-    display.drawText(0, App.height, stats);
+    var health = '%c{gray}%b{black}';
+    health += vsprintf('hp: %d/%d ', [this.player.hp, this.player.maxHP]);
+    display.drawText(0, App.height, health);
+
+    var level = '%c{gray}%b{black}';
+    level += vsprintf('Level: %d', [this.player.z+1]);
+    display.drawText(App.width-10, App.height, level);
   },
 
   handleInput: function(code) {
