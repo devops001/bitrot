@@ -13,6 +13,10 @@ App.Mixins.Moving.Walker = {
 
     // attacking?
     if (target) {
+      var playerInvolved = this.hasMixin('Player') || target.hasMixin('Player');
+      if (!playerInvolved) {
+        return false;
+      }
       if (target.hasMixin('Defending') && this.hasMixin('Attacking')) {
         this.attack(target);
         return true;
@@ -182,6 +186,7 @@ App.Mixins.Attacking.Attacker = {
       var damage = 1 + Math.floor(Math.random() * power);
       App.sendMessage(this, "You hit %s for %d damage", [target.name, damage]);
       target.takeDamage(this, damage);
+      console.log("DEBUG: "+ this.name +" attacked "+ target.name);
     }
   }
 };
