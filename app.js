@@ -11,7 +11,7 @@ var App = {
 
   init: function() {
     this.display = new ROT.Display({width:this.width, height:this.height+1});
-    this.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#fff"});
+    this.display.setOptions({width:App.width, fontSize:14, fontSytle:"bold", bg:"#fff"});
     document.body.appendChild(this.display.getContainer());
     window.onkeypress = function(e) {
       e = e || window.event;

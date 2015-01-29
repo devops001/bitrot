@@ -9,7 +9,7 @@ App.Screens.play = {
 
   enter: function() {
     console.log("entered Screen.play");
-    App.display.setOptions({fontSize:28, fontSytle:"bold", bg:"#000"});
+    App.display.setOptions({fontSize:14, fontSytle:"bold", bg:"#000"});
     var mapDepth  = 3;
     var mapWidth  = 50;
     var mapHeight = 50;
@@ -108,7 +108,7 @@ App.Screens.play = {
 App.Screens.start = {
   enter: function() {
     console.log("entered Screen.start");
-    App.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#00a"});
+    App.display.setOptions({width:App.width, fontSytle:"bold", bg:"#00a"});
   },
   exit:  function() {
     console.log("exited Screen.start");
@@ -131,7 +131,7 @@ App.Screens.start = {
 App.Screens.win = {
   enter: function() {
     console.log("entered Screen.win");
-    App.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#0a0"});
+    App.display.setOptions({width:App.width, fontSize:14, fontSytle:"bold", bg:"#0a0"});
   },
   exit: function() {
     console.log("exited Screen.win");
@@ -154,7 +154,7 @@ App.Screens.win = {
 App.Screens.lose = {
   enter: function() {
     console.log("entered Screen.lose");
-    App.display.setOptions({width:App.width, fontSize:28, fontSytle:"bold", bg:"#a00"});
+    App.display.setOptions({width:App.width, fontSize:14, fontSytle:"bold", bg:"#a00"});
   },
   exit: function() {
     console.log("exited Screen.lose");

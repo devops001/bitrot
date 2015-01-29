@@ -6,11 +6,13 @@ App.Map = function(tiles, player) {
   this.height    = tiles[0][0].length;
   this.entities  = [];
   this.fov       = [];
+  this.explored  = [];
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
   this.addEntityAtRandPos(player, 0);
   this.addMobsToAllLevels(10);
-  this.setupFov();
+  this.initFov();
+  this.initExploredList();
 };
 
 // init:
@@ -29,7 +31,7 @@ App.Map.prototype.addMobsToAllLevels = function(numFungusPerLevel) {
   }
 };
 
-App.Map.prototype.setupFov = function() {
+App.Map.prototype.initFov = function() {
   // TODO: test simple version:
   //var map = this;
   //for (var z=0; z<map.depth; z++) {
@@ -48,6 +50,19 @@ App.Map.prototype.setupFov = function() {
     })();
   }
 };
+
+App.Map.prototype.initExploredList = function() {
+  this.explored = new Array(this.depth);
+  for (var z=0; z<this.depth; z++) {
+    this.explored[z] = new Array(this.width);
+    for (var x=0; x<this.width; x++) {
+      this.explored[z][x] = new Array(this.height);
+      for (var y=0; y<this.height; y++) {
+        this.explored[z][x][y] = false;
+      }
+    }
+  }
+}
 
 // tiles:
 
