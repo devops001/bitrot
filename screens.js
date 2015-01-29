@@ -36,26 +36,25 @@ App.Screens.play = {
     for (var x=startX; x<stopX; x++) {
       for (var y=startY; y<stopY; y++) {
         if (this.map.isExplored(x,y,this.player.z)) {
-          var tile = this.map.getTile(x,y, this.player.z);
-          var fg, bg;
+          var glyph = this.map.getTile(x,y, this.player.z);
+          var ch, fg, bg;
           if (visible[x+","+y]) {
-            fg = tile.fg;
-            bg = tile.bg;
+            var entity = this.map.getEntityAt(x, y, this.player.z);
+            var items  = this.map.getItemsAt(x, y, this.player.z);
+            if (entity) {
+              glyph = entity;
+            } else if (items) {
+              glyph = items[items.length-1];
+            }
+            ch = glyph.ch;
+            fg = glyph.fg;
+            bg = glyph.bg;
           } else {
+            ch = glyph.ch;
             fg = "#222";
             bg = "#111";
           }
-          display.draw(x-startX, y-startY, tile.ch, fg, bg);
-        }
-      }
-    }
-
-    // entities:
-    for (var key in this.map.entities) {
-      var e = this.map.entities[key];
-      if (e.z==this.player.z && e.x>=startX && e.x<stopX && e.y>=startY && e.y<stopY) {
-        if (visible[e.x+","+e.y]) {
-          display.draw(e.x-startX, e.y-startY, e.ch, e.fg, e.bg);
+          display.draw(x-startX, y-startY, ch, fg, bg);
         }
       }
     }
