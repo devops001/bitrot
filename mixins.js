@@ -236,6 +236,11 @@ App.Mixins.Inventory.Carrier = {
     var slots  = template.inventorySlots || 10;
     this.items = new Array(slots);
   },
+  hasItems: function() {
+    var empty = this.numEmptySlots();
+    var leng  = this.items.length;
+    return this.numEmptySlots()!=this.items.length;
+  },
   getItems: function() {
     return this.items;
   },
@@ -243,6 +248,7 @@ App.Mixins.Inventory.Carrier = {
     return this.items[i];
   },
   addItem: function(item) {
+    console.log("DEBUG: adding item: ", item);
     for (var i=0; i<this.items.length; i++) {
       if (!this.items[i]) {
         this.items[i] = item;
@@ -255,9 +261,9 @@ App.Mixins.Inventory.Carrier = {
     this.items[index] = null;
   },
   numEmptySlots: function() {
-    var count = 0;
+    var count = this.items.length;
     for (var i=0; i<this.items.length; i++) {
-      if (!this.items[i]) count++;
+      if (this.items[i]) count--;
     }
     return count;
   },

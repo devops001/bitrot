@@ -4,8 +4,9 @@
 //-----------------------------
 
 App.Screens.play = {
-  map:    null,
-  player: null,
+  map:       null,
+  player:    null,
+  subScreen: null,
 
   enter: function() {
     console.log("entered Screen.play");
@@ -24,6 +25,11 @@ App.Screens.play = {
   },
 
   render: function(display) {
+    if (this.subScreen) {
+      this.subScreen.render(display);
+      return;
+    }
+
     var visible = this.getVisiblePositions();
 
     // tiles:
@@ -76,6 +82,12 @@ App.Screens.play = {
   },
 
   handleInput: function(code) {
+    if (this.subScreen) {
+      this.subScreen.handleInput(code);
+      return;
+    }
+
+    var shouldUnlock = true;
     switch(code) {
     case App.KEY_Enter:      App.switchScreen(App.Screens.win); break;
     case App.KEY_Escape:     App.switchScreen(App.Screens.lose); break;
@@ -85,6 +97,53 @@ App.Screens.play = {
     case App.KEY_RightArrow: this.move( 1,0,0); break;
     case App.KEY_DownArrow:  this.move(0, 1,0); break;
     case App.KEY_UpArrow:    this.move(0,-1,0); break;
+    // inventory:
+    case App.KEY_I:
+    case App.KEY_i:
+      if (this.player.hasItems()) {
+        App.Screens.inventory.setup(this.player, this.player.getItems());
+        this.setSubScreen(App.Screens.inventory);
+      } else {
+        App.sendMessage(this.player, "You are not carrying anything");
+        App.refresh();
+        shouldUnlock = false;
+      }
+      break;
+    // pickup:
+    case App.KEY_G:
+    case App.KEY_g:
+      var items = this.map.getItemsAt(this.player.x, this.player.y, this.player.z);
+      if (!items) {
+        App.sendMessage(this.player, "There is nothing here to pickup");
+        App.refresh();
+        shouldUnlock = false;
+      } else if (items.length == 1) {
+        if (this.player.pickupItems([0])) {
+          App.sendMessage(this.player, "You pickup %s", [items[0].describeOne()]);
+        } else {
+          App.sendMessage(this.player, "Your inventory is full");
+        }
+      } else {
+        App.Screens.itemPickup.setup(this.player, items);
+        this.setSubScreen(App.Screens.itemPickup);
+      }
+      break;
+    // drop:
+    case App.KEY_D:
+    case App.KEY_d:
+      if (!this.player.hasItems()) {
+        App.sendMessage(this.player, "You don't have anything to drop");
+        App.refresh();
+        shouldUnlock = false;
+      } else {
+        App.Screens.itemDrop.setup(this.player, this.player.getItems());
+        this.setSubScreen(App.Screens.itemDrop);
+      }
+      break;
+    }
+
+    if (shouldUnlock) {
+      this.map.engine.unlock();
     }
   },
 
@@ -93,7 +152,6 @@ App.Screens.play = {
     var newY = this.player.y + dirY;
     var newZ = this.player.z + dirZ;
     this.player.tryMove(newX, newY, newZ, this.map);
-    this.map.engine.unlock();
   },
 
   getVisiblePositions: function() {
@@ -107,6 +165,11 @@ App.Screens.play = {
     };
     this.map.fov[player.z].compute(player.x,player.y,player.sightRadius,cb);
     return positions;
+  },
+
+  setSubScreen: function(subScreen) {
+    this.subScreen = subScreen;
+    App.refresh();
   }
 };
 
@@ -178,3 +241,125 @@ App.Screens.lose = {
     }
   }
 };
+
+//-----------------------------
+// ItemList Generic SubScreen:
+//-----------------------------
+
+App.Screens.ItemList = function(template) {
+  this.caption           = template.caption;
+  this.okFunction        = template.okFunction;
+  this.canSelect         = template.canSelect;
+  this.canSelectMultiple = template.canSelectMultiple;
+};
+
+App.Screens.ItemList.prototype.setup = function(player, items) {
+  this.player   = player;
+  this.items    = items;
+  this.selected = {};
+};
+
+App.Screens.ItemList.prototype.closeSubScreen = function() {
+  App.Screens.play.setSubScreen(undefined);
+};
+
+App.Screens.ItemList.prototype.render = function(display) {
+  display.drawText(0, 0, this.caption);
+  var letters = 'abcdefghijklmnopqrstuvwxyz';
+  var row     = 0;
+  for (var i=0; i<this.items.length; i++) {
+    if (this.items[i]) {
+      var letter = letters.substring(i,i+1);
+      var state  = (this.canSelectMultiple && this.selected[i]) ? '+' : '-';
+      var line   = letter +' '+ state +' '+ this.items[i].describe();
+      display.drawText(0, 2+row, line);
+      row++;
+    }
+  }
+};
+
+App.Screens.ItemList.prototype.executeOkFunction = function() {
+  var selected = {};
+  for (var key in this.selected) {
+    selected[key] = this.items[key];
+  }
+  this.closeSubScreen();
+  if (!this.okFunction || this.okFunction(selected)) {
+    this.player.map.engine.unlock();
+  }
+};
+
+App.Screens.ItemList.prototype.handleInput = function(code) {
+  if (code === App.KEY_Escape) {
+    this.closeSubScreen();
+    return;
+  } else if (code === App.KEY_Enter) {
+    if (!this.canSelect || Object.keys(this.selected).length==0) {
+      this.closeSubScreen();
+      return;
+    } else {
+      this.executeOkFunction();
+      return;
+    }
+  }
+  var index;
+  if (code>=App.KEY_A && code<=App.KEY_Z) {
+    index = code - App.KEY_A;
+  } else if (code>=App.KEY_a && code<=App.KEY_z) {
+    index = code - App.KEY_a;
+  } else {
+    return;
+  }
+  if (this.items[index]) {
+    if (this.canSelecectMultiple) {
+      if (this.selected[index]) {
+        delete this.selected[index];
+      } else {
+        this.selected[index] = true;
+      }
+      App.refresh();
+    } else {
+      this.selected[index] = true;
+      this.executeOkFunction();
+    }
+  }
+};
+
+//-----------------------------
+// inventory subScreen:
+//-----------------------------
+
+App.Screens.inventory = new App.Screens.ItemList({
+  caption: 'Inventory',
+  canSelect: false
+});
+
+//-----------------------------
+// itemPickup subScreen:
+//-----------------------------
+
+App.Screens.itemPickup = new App.Screens.ItemList({
+  caption: 'Choose the items that you wish to pickup',
+  canSelect: true,
+  canSelectMultiple: true,
+  okFunction: function(selectedItems) {
+    if (!this.player.pickupItems(Object.keys(selectedItems))) {
+      App.sendMessage(this.player, "Your inventory is too full!");
+    }
+    return true;
+  }
+});
+
+//-----------------------------
+// itemDrop subScreen:
+//-----------------------------
+
+App.Screens.itemDrop = new App.Screens.ItemList({
+  caption: 'Choose the item tha tyou wish to drop',
+  canSelect: true,
+  canSelectMultiple: false,
+  okFunction: function(selectedItems) {
+    this.player.dropItem(Object.keys(selectedItems)[0]);
+    return true;
+  }
+});
