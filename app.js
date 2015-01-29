@@ -43,7 +43,7 @@ var App = {
   },
 
   sendMessage: function(receiver, message, args) {
-    if (receiver.hasMixin("MessageReceiving")) {
+    if (receiver.hasMixin("Messaging")) {
       if (args) { message = vsprintf(message, args); }
       receiver.receiveMessage(message);
     }
@@ -53,7 +53,7 @@ var App = {
     if (args) { message = vsprintf(message, args); }
     var entities = map.getEntitiesWithinRadius(x, y, z, 5);
     for (var i=0; i<entities.length; i++) {
-      if (entities[i].hasMixin("MessageReceiving")) {
+      if (entities[i].hasMixin("Messaging")) {
         this.sendMessage(entities[i], message);
       }
     }

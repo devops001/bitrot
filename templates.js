@@ -9,12 +9,12 @@ App.Templates.player = {
   attackPower: 10,
   sightRadius: 50,
   mixins: [
-    App.Mixins.Player,
-    App.Mixins.Digger,
-    App.Mixins.Defender,
-    App.Mixins.Attacker,
-    App.Mixins.MessageReceiver,
-    App.Mixins.Sight
+    App.Mixins.Acting.Player,
+    App.Mixins.Moving.Digger,
+    App.Mixins.Defending.Defender,
+    App.Mixins.Attacking.Attacker,
+    App.Mixins.Messaging.Receiver,
+    App.Mixins.Seeing.Sight
   ]
 };
 
@@ -26,10 +26,10 @@ App.Templates.bat = {
   attackPower: 5,
   defense:     5,
   mixins: [
-    App.Mixins.Wanderer,
-    App.Mixins.Walker,
-    App.Mixins.Defender,
-    App.Mixins.Attacker
+    App.Mixins.Acting.Wanderer,
+    App.Mixins.Moving.Walker,
+    App.Mixins.Defending.Defender,
+    App.Mixins.Attacking.Attacker
   ]
 };
 
@@ -41,10 +41,10 @@ App.Templates.newt = {
   attackPower: 4,
   defense:     6,
   mixins: [
-    App.Mixins.Wanderer,
-    App.Mixins.Walker,
-    App.Mixins.Defender,
-    App.Mixins.Attacker
+    App.Mixins.Acting.Wanderer,
+    App.Mixins.Moving.Walker,
+    App.Mixins.Defending.Defender,
+    App.Mixins.Attacking.Attacker
   ]
 };
 
@@ -55,8 +55,8 @@ App.Templates.fungus = {
   maxHP:   15,
   defense: 0,
   mixins: [
-    App.Mixins.Fungus,
-    App.Mixins.Defender
+    App.Mixins.Acting.Fungus,
+    App.Mixins.Defending.Defender
   ]
 };
 
@@ -68,7 +68,7 @@ App.Templates.poisonousFungus = {
   maxHP:   15,
   defense: 0,
   mixins: [
-    App.Mixins.Fungus,
-    App.Mixins.PoisonousDefender
+    App.Mixins.Acting.Fungus,
+    App.Mixins.Defending.Poisonous
   ]
 };
