@@ -92,6 +92,20 @@ App.Map.prototype.isOpen = function(x, y, z) {
   return this.getTile(x,y,z).isWalkable && !this.getEntityAt(x,y,z);
 };
 
+App.Map.prototype.isExplored = function(x, y, z) {
+  if (this.getTile(x,y,z) == App.Tiles.null) {
+    return false;
+  } else {
+    return this.explored[z][x][y];
+  }
+}
+
+App.Map.prototype.setExplored = function(x,y,z, isExplored) {
+  if (this.getTile(x,y,z) != App.Tiles.null) {
+    this.explored[z][x][y] = isExplored;
+  }
+}
+
 // entities:
 
 App.Map.prototype.getEntityAt = function(x, y, z) {

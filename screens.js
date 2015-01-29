@@ -35,9 +35,17 @@ App.Screens.play = {
     var stopY   = startY + App.height;
     for (var x=startX; x<stopX; x++) {
       for (var y=startY; y<stopY; y++) {
-        if (visible[x+","+y]) {
+        if (this.map.isExplored(x,y,this.player.z)) {
           var tile = this.map.getTile(x,y, this.player.z);
-          display.draw(x-startX, y-startY, tile.ch, tile.fg, tile.bg);
+          var fg, bg;
+          if (visible[x+","+y]) {
+            fg = tile.fg;
+            bg = tile.bg;
+          } else {
+            fg = "#222";
+            bg = "#111";
+          }
+          display.draw(x-startX, y-startY, tile.ch, fg, bg);
         }
       }
     }
@@ -91,12 +99,14 @@ App.Screens.play = {
 
   getVisiblePositions: function() {
     // TODO: stop using strings as keys to be faster
+    var player    = this.player;
+    var map       = this.map;
     var positions = {};
-    var x  = this.player.x;
-    var y  = this.player.y;
-    var sr = this.player.sightRadius;
-    var cb = function(x,y,radius,visibility) { positions[x+","+y]=true; };
-    this.map.fov[this.player.z].compute(x,y,sr,cb);
+    var cb = function(x,y,radius,visibility) {
+      positions[x+","+y]=true;
+      map.setExplored(x,y,player.z, true);
+    };
+    this.map.fov[player.z].compute(player.x,player.y,player.sightRadius,cb);
     return positions;
   }
 };
