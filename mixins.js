@@ -186,7 +186,6 @@ App.Mixins.Attacking.Attacker = {
       var damage = 1 + Math.floor(Math.random() * power);
       App.sendMessage(this, "You hit %s for %d damage", [target.name, damage]);
       target.takeDamage(this, damage);
-      console.log("DEBUG: "+ this.name +" attacked "+ target.name);
     }
   }
 };

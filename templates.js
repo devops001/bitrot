@@ -48,6 +48,21 @@ App.Templates.newt = {
   ]
 };
 
+App.Templates.poisonousMole = {
+  name:       'poisonousMole',
+  ch:         'm',
+  fg:         '#afa',
+  maxHP:       10,
+  attackPower: 5,
+  defense:     1,
+  mixins: [
+    App.Mixins.Acting.Wanderer,
+    App.Mixins.Moving.Digger,
+    App.Mixins.Defending.Poisonous,
+    App.Mixins.Attacking.Attacker
+  ]
+}
+
 App.Templates.fungus = {
   name:    'fungus',
   ch:      'F',
