@@ -4,9 +4,9 @@ App.Map = function(tiles, player) {
   this.depth     = tiles.length;
   this.width     = tiles[0].length;
   this.height    = tiles[0][0].length;
-  this.entities  = [];
   this.fov       = [];
   this.explored  = [];
+  this.entities  = {};
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
   this.addEntityAtRandPos(player, 0);
@@ -17,16 +17,26 @@ App.Map = function(tiles, player) {
 
 // init:
 
-App.Map.prototype.addMobsToAllLevels = function(numFungusPerLevel) {
+App.Map.prototype.addMobsToAllLevels = function(maxNumEachMobPerLevel) {
   for (var z=0; z<this.depth; z++) {
-    for (var i=0; i<numFungusPerLevel; i++) {
-      var fungus;
+    for (var i=0; i<maxNumEachMobPerLevel; i++) {
       if (Math.random()>0.25) {
-        fungus = new App.Entity(App.Templates.fungus);
-      } else {
-        fungus = new App.Entity(App.Templates.poisonousFungus);
+        var bat = new App.Entity(App.Templates.bat);
+        this.addEntityAtRandPos(bat, z);
       }
-      this.addEntityAtRandPos(fungus, z);
+      if (Math.random()>0.25) {
+        var newt = new App.Entity(App.Templates.newt);
+        this.addEntityAtRandPos(newt, z);
+      }
+      if (Math.random()>0.25) {
+        if (Math.random()>0.25) {
+          var fungus = new App.Entity(App.Templates.fungus);
+          this.addEntityAtRandPos(fungus, z);
+        } else {
+          var fungus = new App.Entity(App.Templates.poisonousFungus);
+          this.addEntityAtRandPos(fungus, z);
+        }
+      }
     }
   }
 };
@@ -109,22 +119,13 @@ App.Map.prototype.setExplored = function(x,y,z, isExplored) {
 // entities:
 
 App.Map.prototype.getEntityAt = function(x, y, z) {
-  for (var i=0; i<this.entities.length; i++) {
-    var entity = this.entities[i];
-    if (entity.z==z && entity.x==x && entity.y==y) {
-      return entity;
-    }
-  }
-  return null;
+  // TODO: improve speed by not using strings for keys:
+  return this.entities[x+","+y+","+z];
 };
 
 App.Map.prototype.addEntity = function(entity) {
-  var e = entity;
-  if (e.x<0 || e.x>=this.width || e.y<0 || e.y>=this.height || e.z<0 || e.z>=this.depth) {
-    throw new Error('addEntity: entity out of map bounds');
-  }
   entity.map = this;
-  this.entities.push(entity);
+  this.updateEntityPosition(entity);
   if (entity.hasMixin('Acting')) {
     this.scheduler.add(entity, true);
   }
@@ -137,11 +138,10 @@ App.Map.prototype.addEntityAtRandPos = function(entity, z) {
 };
 
 App.Map.prototype.removeEntity = function(entity) {
-  for (var i=0; i<this.entities.length; i++) {
-    if (this.entities[i] == entity) {
-      this.entities.splice(i, 1);
-      break;
-    }
+  // TODO: improve speed by not using strings for keys:
+  var key = entity.x +","+ entity.y +","+ entity.z;
+  if (this.entities[key] == entity) {
+    delete this.entities[key];
   }
   if (entity.hasMixin('Acting')) {
     this.scheduler.remove(entity);
@@ -154,11 +154,30 @@ App.Map.prototype.getEntitiesWithinRadius = function(x, y, z, radius) {
   var right  = x+radius;
   var top    = y-radius;
   var bottom = y+radius;
-  for (var i=0; i<this.entities.length; i++) {
-    var e = this.entities[i];
+  for (var key in this.entities) {
+    var e = this.entities[key];
     if (e.z==z && e.x>=left && e.x<=right && e.y>=top && e.y<=bottom) {
       entities.push(e);
     }
   }
   return entities;
 };
+
+App.Map.prototype.updateEntityPosition = function(entity, oldX, oldY, oldZ) {
+  // TODO: improve speed by not using strings for keys:
+  if (oldX) {
+    var oldKey = oldX +","+ oldY +","+ oldZ;
+    if (this.entities[oldKey] == entity) {
+      delete this.entities[oldKey];
+    }
+  }
+  var e = entity;
+  if (e.x<0 || e.x>=this.width || e.y<0 || e.y>=this.height || e.z<0 || e.z>=this.depth) {
+    throw new Error("tried to add entity that is out of bounds", entity);
+  }
+  var key = e.x +","+ e.y +","+ e.z;
+  if (this.entities[key]) {
+    throw new Error("tried to add entity in occupied space");
+  }
+  this.entities[key] = entity;
+}

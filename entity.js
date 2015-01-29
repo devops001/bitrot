@@ -36,7 +36,13 @@ App.Entity.prototype.hasMixin = function(mixin) {
 };
 
 App.Entity.prototype.setPosition = function(x, y, z) {
+  var oldX = this.x;
+  var oldY = this.y;
+  var oldZ = this.z;
   this.x = x;
   this.y = y;
   this.z = z;
+  if (this.map) {
+    this.map.updateEntityPosition(this, oldX, oldY, oldZ);
+  }
 };

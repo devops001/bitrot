@@ -50,9 +50,9 @@ App.Screens.play = {
       }
     }
 
-    // entities: (draw in reverse order to draw player last/on top):
-    for (var i=this.map.entities.length-1; i>-1; i--) {
-      var e = this.map.entities[i];
+    // entities:
+    for (var key in this.map.entities) {
+      var e = this.map.entities[key];
       if (e.z==this.player.z && e.x>=startX && e.x<stopX && e.y>=startY && e.y<stopY) {
         if (visible[e.x+","+e.y]) {
           display.draw(e.x-startX, e.y-startY, e.ch, e.fg, e.bg);

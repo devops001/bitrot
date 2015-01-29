@@ -107,6 +107,19 @@ App.Mixins.Fungus = {
   }
 };
 
+App.Mixins.Wanderer = {
+  name: 'Wanderer',
+  group: 'Acting',
+  act: function() {
+    var dir = (Math.round(Math.random())===1) ? 1 : -1;
+    if (Math.round(Math.random())===1) {
+      this.tryMove(this.x+dir, this.y, this.z, this.map);
+    } else {
+      this.tryMove(this.x, this.y+dir, this.z, this.map);
+    }
+  }
+}
+
 //------------------------------
 // Defending group:
 //------------------------------
