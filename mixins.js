@@ -223,3 +223,66 @@ App.Mixins.Seeing.Sight = {
     this.sightRadius = template.sightRadius || 5;
   }
 };
+
+//------------------------------
+// Inventory group:
+//------------------------------
+App.Mixins.Inventory = {};
+
+App.Mixins.Inventory.Carrier = {
+  name:  'Carrier',
+  group: 'Inventory',
+  init: function(template) {
+    var slots  = template.inventorySlots || 10;
+    this.items = new Array(slots);
+  },
+  getItems: function() {
+    return this.items;
+  },
+  getItem: function(i) {
+    return this.items[i];
+  },
+  addItem: function(item) {
+    for (var i=0; i<this.items.length; i++) {
+      if (!this.items[i]) {
+        this.items[i] = item;
+        return true;
+      }
+    }
+    return false;
+  },
+  removeItem: function(index) {
+    this.items[index] = null;
+  },
+  numEmptySlots: function() {
+    var count = 0;
+    for (var i=0; i<this.items.length; i++) {
+      if (!this.items[i]) count++;
+    }
+    return count;
+  },
+  canAddItem: function() {
+    return this.numEmptySlots().length>0;
+  },
+  pickupItems: function(indices) {
+    var items    = this.map.getItemsAt(this.x, this.y, this.z);
+    var leftOver = [];
+    for (var i=0; i<indices.length; i++) {
+      var item = items[indices[i]];
+      if (!this.addItem(item)) {
+        leftOver.push(item);
+      }
+    }
+    this.map.setItemsAt(this.x, this.y, this.z, leftOver);
+    return leftOver.length==0;
+  },
+  dropItem: function(index) {
+    var item = this.getItem(index);
+    if (item) {
+      if (this.map) {
+        this.map.addItem(this.x, this.y, this.z, item);
+      }
+      this.removeItem(index);
+    }
+  }
+};
