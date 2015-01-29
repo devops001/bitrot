@@ -11,33 +11,22 @@ App.Map = function(tiles, player) {
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
   this.addEntityAtRandPos(player, 0);
-  this.addMobsToAllLevels();
+  this.populateLevels();
   this.initFov();
   this.initExploredList();
 };
 
 // init:
 
-App.Map.prototype.addMobsToAllLevels = function() {
-  var maxPerLevel = 10;
+App.Map.prototype.populateLevels = function() {
+  var entitiesPerLevel = 15;
+  var itemsPerLevel    = 10;
   for (var z=0; z<this.depth; z++) {
-    for (var i=0; i<maxPerLevel; i++) {
-      var mob;
-      var roll = Math.random();
-      if (roll < 0.25) {
-        mob = new App.Entity(App.Templates.bat);
-      } else if (roll < 0.50) {
-        mob = new App.Entity(App.Templates.newt);
-      } else if (roll < 0.75) {
-        mob = new App.Entity(App.Templates.poisonousMole);
-      } else {
-        if (Math.random()>0.25) {
-          mob = new App.Entity(App.Templates.fungus);
-        } else {
-          mob = new App.Entity(App.Templates.poisonousFungus);
-        }
-      }
-      this.addEntityAtRandPos(mob, z);
+    for (var i=0; i<entitiesPerLevel; i++) {
+      this.addEntityAtRandPos(App.EntityRepository.createRandom(), z);
+    }
+    for (var i=0; i<itemsPerLevel; i++) {
+      this.addItemAtRandPos(App.ItemRepository.createRandom(), z);
     }
   }
 };

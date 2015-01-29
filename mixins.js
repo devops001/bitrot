@@ -100,7 +100,8 @@ App.Mixins.Acting.Fungus = {
         var dx = Math.floor(Math.random()*3)-1;
         var dy = Math.floor(Math.random()*3)-1;
         if (this.map.isOpen(this.x+dx, this.y+dy, this.z)) {
-          var spawn = new App.Entity(App.Templates.fungus);
+          var type  = Math.random()>0.5 ? 'fungus' : 'poisonousFungus';
+          var spawn = App.EntityRepository.create(type);
           spawn.setPosition(this.x+dx, this.y+dy, this.z);
           this.map.addEntity(spawn);
           this.spawnsLeft--;

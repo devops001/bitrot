@@ -5,4 +5,20 @@ App.Item = function(properties) {
   this.name = properties.name || '';
 };
 
-App.Item.extend(App.Glyph);
+//------------------------------
+// Repository:
+//------------------------------
+
+App.ItemRepository = new App.Repository("items", App.Item);
+
+App.ItemRepository.define('apple', {
+  name: 'apple',
+  ch:   '%',
+  fg:   '#f00'
+});
+
+App.ItemRepository.define('rock', {
+  name: 'rock',
+  ch:   '*',
+  fg:   '#fff'
+});
