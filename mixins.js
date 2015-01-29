@@ -145,7 +145,7 @@ App.Mixins.Defending.Defender = {
     if (this.hp <= 0) {
       App.sendMessage(attacker, "You killed %s", [this.name]);
       App.sendMessage(this, "You died!");
-      if (this.name == "player") {
+      if (this.hasMixin('Player')) {
         App.switchScreen(App.Screens.lose);
       } else {
         this.map.removeEntity(this);
