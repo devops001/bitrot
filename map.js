@@ -7,6 +7,7 @@ App.Map = function(tiles, player) {
   this.fov       = [];
   this.explored  = [];
   this.entities  = {};
+  this.items     = {};
   this.scheduler = new ROT.Scheduler.Simple();
   this.engine    = new ROT.Engine(this.scheduler);
   this.addEntityAtRandPos(player, 0);
@@ -73,6 +74,39 @@ App.Map.prototype.initExploredList = function() {
     }
   }
 }
+
+// items:
+
+App.Map.prototype.getItemsAt = function(x, y, z) {
+  // TODO: stop using string keys
+  return this.items[x+","+y+","+z];
+};
+
+App.Map.prototype.setItemsAt = function(x, y, z, items) {
+  // TODO: stop using string keys
+  var key = x +","+ y +","+ z;
+  if (items.length == 0) {
+    if (this.items[key]) {
+      delete this.items[key];
+    }
+  } else {
+    this.items[key] = items;
+  }
+};
+
+App.Map.prototype.addItem = function(x, y, z, item) {
+  var key = x +","+ y +","+ z;
+  if (this.items[key]) {
+    this.items[key].push(item);
+  } else {
+    this.items[key] = [item];
+  }
+};
+
+App.Map.prototype.addItemAtRandPos = function(item, z) {
+  var pos = this.getRandOpenPos(z);
+  this.addItem(pos.x, pos.y, pos.z, item);
+};
 
 // tiles:
 
