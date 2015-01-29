@@ -87,7 +87,9 @@ App.Screens.play = {
       return;
     }
 
+    this.player.clearMessages();
     var shouldUnlock = true;
+
     switch(code) {
     case App.KEY_Enter:      App.switchScreen(App.Screens.win); break;
     case App.KEY_Escape:     App.switchScreen(App.Screens.lose); break;
@@ -284,7 +286,7 @@ App.Screens.ItemList.prototype.executeOkFunction = function() {
     selected[key] = this.items[key];
   }
   this.closeSubScreen();
-  if (!this.okFunction || this.okFunction(selected)) {
+  if (this.okFunction(selected)) {
     this.player.map.engine.unlock();
   }
 };
@@ -308,10 +310,11 @@ App.Screens.ItemList.prototype.handleInput = function(code) {
   } else if (code>=App.KEY_a && code<=App.KEY_z) {
     index = code - App.KEY_a;
   } else {
-    return;
+    console.log("DEBUG: unknown code: ", code);
+    App.refresh();
   }
   if (this.items[index]) {
-    if (this.canSelecectMultiple) {
+    if (this.canSelectMultiple) {
       if (this.selected[index]) {
         delete this.selected[index];
       } else {
@@ -331,7 +334,10 @@ App.Screens.ItemList.prototype.handleInput = function(code) {
 
 App.Screens.inventory = new App.Screens.ItemList({
   caption: 'Inventory',
-  canSelect: false
+  canSelect: false,
+  okFunction: function() {
+    return true;
+  }
 });
 
 //-----------------------------
@@ -355,11 +361,14 @@ App.Screens.itemPickup = new App.Screens.ItemList({
 //-----------------------------
 
 App.Screens.itemDrop = new App.Screens.ItemList({
-  caption: 'Choose the item tha tyou wish to drop',
+  caption: 'Choose the item that you wish to drop',
   canSelect: true,
-  canSelectMultiple: false,
+  canSelectMultiple: true,
   okFunction: function(selectedItems) {
-    this.player.dropItem(Object.keys(selectedItems)[0]);
+    for (var key in Object.keys(selectedItems)) {
+      console.log("DEBUG: key: ", key, selectedItems);
+      this.player.dropItem(key);
+    }
     return true;
   }
 });
