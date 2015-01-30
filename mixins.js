@@ -272,9 +272,13 @@ App.Mixins.Inventory.Carrier = {
   pickupItems: function(indices) {
     var items    = this.map.getItemsAt(this.x, this.y, this.z);
     var leftOver = [];
-    for (var i=0; i<indices.length; i++) {
-      var item = items[indices[i]];
-      if (!this.addItem(item)) {
+    for (var i=0; i<items.length; i++) {
+      var item = items[i];
+      if (indices.indexOf(i)>-1) {
+        if (!this.addItem(item)) {
+          leftOver.push(item);
+        }
+      } else {
         leftOver.push(item);
       }
     }
@@ -288,6 +292,11 @@ App.Mixins.Inventory.Carrier = {
         this.map.addItem(this.x, this.y, this.z, item);
       }
       this.removeItem(index);
+    }
+  },
+  dropItems: function(indices) {
+    for (var i=0; i<indices.length; i++) {
+      this.dropItem(indices[i]);
     }
   }
 };

@@ -10,7 +10,7 @@ App.Screens.play = {
 
   enter: function() {
     console.log("entered Screen.play");
-    App.display.setOptions({fontSize:14, fontSytle:"bold", bg:"#000"});
+    App.display.setOptions({fontSize:20, fontSytle:"bold", bg:"#000"});
     var mapDepth  = 3;
     var mapWidth  = 50;
     var mapHeight = 50;
@@ -171,7 +171,6 @@ App.Screens.play = {
 
   setSubScreen: function(subScreen) {
     this.subScreen = subScreen;
-    App.refresh();
   }
 };
 
@@ -259,10 +258,14 @@ App.Screens.ItemList.prototype.setup = function(player, items) {
   this.player   = player;
   this.items    = items;
   this.selected = {};
+  for (var i=0; i<items.length; i++) {
+    this.selected[i] = false;
+  }
 };
 
 App.Screens.ItemList.prototype.closeSubScreen = function() {
   App.Screens.play.setSubScreen(undefined);
+  App.refresh();
 };
 
 App.Screens.ItemList.prototype.render = function(display) {
@@ -281,14 +284,20 @@ App.Screens.ItemList.prototype.render = function(display) {
 };
 
 App.Screens.ItemList.prototype.executeOkFunction = function() {
-  var selected = {};
-  for (var key in this.selected) {
-    selected[key] = this.items[key];
-  }
   this.closeSubScreen();
-  if (this.okFunction(selected)) {
+  if (this.okFunction()) {
     this.player.map.engine.unlock();
   }
+};
+
+App.Screens.ItemList.prototype.getSelectedIndices = function() {
+  var indices = [];
+  for (var i=0; i<this.items.length; i++) {
+    if (this.selected[i]) {
+      indices.push(i);
+    }
+  }
+  return indices;
 };
 
 App.Screens.ItemList.prototype.handleInput = function(code) {
@@ -296,7 +305,7 @@ App.Screens.ItemList.prototype.handleInput = function(code) {
     this.closeSubScreen();
     return;
   } else if (code === App.KEY_Enter) {
-    if (!this.canSelect || Object.keys(this.selected).length==0) {
+    if (!this.canSelect || this.getSelectedIndices().length==0) {
       this.closeSubScreen();
       return;
     } else {
@@ -310,16 +319,11 @@ App.Screens.ItemList.prototype.handleInput = function(code) {
   } else if (code>=App.KEY_a && code<=App.KEY_z) {
     index = code - App.KEY_a;
   } else {
-    console.log("DEBUG: unknown code: ", code);
-    App.refresh();
+    return;
   }
   if (this.items[index]) {
     if (this.canSelectMultiple) {
-      if (this.selected[index]) {
-        delete this.selected[index];
-      } else {
-        this.selected[index] = true;
-      }
+      this.selected[index] = !this.selected[index];
       App.refresh();
     } else {
       this.selected[index] = true;
@@ -348,8 +352,9 @@ App.Screens.itemPickup = new App.Screens.ItemList({
   caption: 'Choose the items that you wish to pickup',
   canSelect: true,
   canSelectMultiple: true,
-  okFunction: function(selectedItems) {
-    if (!this.player.pickupItems(Object.keys(selectedItems))) {
+  okFunction: function() {
+    console.log("DEBUG: itemPickup selectedIndices: ", this.getSelectedIndices());
+    if (!this.player.pickupItems(this.getSelectedIndices())) {
       App.sendMessage(this.player, "Your inventory is too full!");
     }
     return true;
@@ -364,11 +369,8 @@ App.Screens.itemDrop = new App.Screens.ItemList({
   caption: 'Choose the item that you wish to drop',
   canSelect: true,
   canSelectMultiple: true,
-  okFunction: function(selectedItems) {
-    for (var key in Object.keys(selectedItems)) {
-      console.log("DEBUG: key: ", key, selectedItems);
-      this.player.dropItem(key);
-    }
+  okFunction: function() {
+    this.player.dropItems(this.getSelectedIndices());
     return true;
   }
 });
