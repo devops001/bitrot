@@ -353,7 +353,6 @@ App.Screens.itemPickup = new App.Screens.ItemList({
   canSelect: true,
   canSelectMultiple: true,
   okFunction: function() {
-    console.log("DEBUG: itemPickup selectedIndices: ", this.getSelectedIndices());
     if (!this.player.pickupItems(this.getSelectedIndices())) {
       App.sendMessage(this.player, "Your inventory is too full!");
     }

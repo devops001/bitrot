@@ -8,8 +8,8 @@ App.Mixins.Moving.Walker = {
   name:  'Walker',
   group: 'Moving',
   tryMove: function(x, y, z, map) {
-    var currentTile = map.getTile(this.x,this.y,this.z);
-    var target      = map.getEntityAt(x,y,z);
+    var currentTile    = map.getTile(this.x,this.y,this.z);
+    var target         = map.getEntityAt(x,y,z);
 
     // attacking?
     if (target) {
@@ -50,6 +50,14 @@ App.Mixins.Moving.Walker = {
     // moving on same level:
     if (map.isOpen(x,y,z)) {
       this.setPosition(x,y,z);
+      var items = map.getItemsAt(x,y,z);
+      if (items) {
+        if (items.length == 1) {
+          App.sendMessage(this, "You see %s", [items[0].describeOne()]);
+        } else if (items.length > 0) {
+          App.sendMessage(this, "You see several items here");
+        }
+      }
       return true;
     } else {
       return false;
