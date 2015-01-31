@@ -188,7 +188,7 @@ App.Map.prototype.getEntitiesWithinRadius = function(x, y, z, radius) {
 
 App.Map.prototype.updateEntityPosition = function(entity, oldX, oldY, oldZ) {
   // TODO: improve speed by not using strings for keys:
-  if (oldX) {
+  if (typeof oldX !== 'undefined') {
     var oldKey = oldX +","+ oldY +","+ oldZ;
     if (this.entities[oldKey] == entity) {
       delete this.entities[oldKey];
