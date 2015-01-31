@@ -7,7 +7,7 @@ App.Templates.player = {
   maxHP:          40,
   defense:         0,
   attackPower:    10,
-  sightRadius:    50,
+  sightRadius:    10,
   inventorySlots: 22,
   mixins: [
     App.Mixins.Acting.Player,      App.Mixins.Moving.Digger,
