@@ -1,13 +1,13 @@
 
 var App = {
-  width:     40,
-  height:    20,
-  display:   null,
-  screen:    null,
-  Screens:   {},
-  Tiles:     {},
-  Mixins:    {},
-  Templates: {},
+  width:        40,
+  height:       20,
+  display:    null,
+  screen:     null,
+  Screens:      {},
+  Tiles:        {},
+  EntityMixins: {},
+  Templates:    {},
 
   init: function() {
     this.display = new ROT.Display({width:this.width, height:this.height+1});

@@ -10,9 +10,9 @@ App.Templates.player = {
   sightRadius:    10,
   inventorySlots: 22,
   mixins: [
-    App.Mixins.Acting.Player,      App.Mixins.Moving.Digger,
-    App.Mixins.Defending.Defender, App.Mixins.Attacking.Attacker,
-    App.Mixins.Messaging.Receiver, App.Mixins.Seeing.Sight,
-    App.Mixins.Inventory.Carrier
+    App.EntityMixins.Acting.Player,      App.EntityMixins.Moving.Digger,
+    App.EntityMixins.Defending.Defender, App.EntityMixins.Attacking.Attacker,
+    App.EntityMixins.Messaging.Receiver, App.EntityMixins.Seeing.Sight,
+    App.EntityMixins.Inventory.Carrier
   ]
 };

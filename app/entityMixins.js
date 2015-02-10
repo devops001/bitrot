@@ -2,9 +2,9 @@
 //------------------------------
 // Moving group:
 //------------------------------
-App.Mixins.Moving = {};
+App.EntityMixins.Moving = {};
 
-App.Mixins.Moving.Walker = {
+App.EntityMixins.Moving.Walker = {
   name:  'Walker',
   group: 'Moving',
   tryMove: function(x, y, z, map) {
@@ -66,11 +66,11 @@ App.Mixins.Moving.Walker = {
   }
 };
 
-App.Mixins.Moving.Digger = {
+App.EntityMixins.Moving.Digger = {
   name:  'Digger',
   group: 'Moving',
   tryMove: function(x, y, z, map) {
-    if (App.Mixins.Moving.Walker.tryMove.call(this, x, y, z, map)) {
+    if (App.EntityMixins.Moving.Walker.tryMove.call(this, x, y, z, map)) {
       return true;
     } else if (map.getTile(x,y,z).isDiggable) {
       map.dig(x,y,z);
@@ -83,9 +83,9 @@ App.Mixins.Moving.Digger = {
 //------------------------------
 // Acting group:
 //------------------------------
-App.Mixins.Acting = {};
+App.EntityMixins.Acting = {};
 
-App.Mixins.Acting.Player = {
+App.EntityMixins.Acting.Player = {
   name:  'Player',
   group: 'Acting',
   act: function() {
@@ -95,7 +95,7 @@ App.Mixins.Acting.Player = {
   }
 };
 
-App.Mixins.Acting.Fungus = {
+App.EntityMixins.Acting.Fungus = {
   name:  'Fungus',
   group: 'Acting',
   init: function() {
@@ -122,7 +122,7 @@ App.Mixins.Acting.Fungus = {
   }
 };
 
-App.Mixins.Acting.Wanderer = {
+App.EntityMixins.Acting.Wanderer = {
   name: 'Wanderer',
   group: 'Acting',
   act: function() {
@@ -138,9 +138,9 @@ App.Mixins.Acting.Wanderer = {
 //------------------------------
 // Defending group:
 //------------------------------
-App.Mixins.Defending = {};
+App.EntityMixins.Defending = {};
 
-App.Mixins.Defending.Defender = {
+App.EntityMixins.Defending.Defender = {
   name:  'Defender',
   group: 'Defending',
   init:  function(template) {
@@ -158,15 +158,15 @@ App.Mixins.Defending.Defender = {
   }
 };
 
-App.Mixins.Defending.Poisonous = {
+App.EntityMixins.Defending.Poisonous = {
   name:  'Poisonous',
   group: 'Defending',
   init:  function(template) {
-    App.Mixins.Defending.Defender.init.call(this, template);
+    App.EntityMixins.Defending.Defender.init.call(this, template);
     this.poisonStrength = 10;
   },
   takeDamage: function(attacker, amount) {
-    App.Mixins.Defending.Defender.takeDamage.call(this, attacker, amount);
+    App.EntityMixins.Defending.Defender.takeDamage.call(this, attacker, amount);
     if (attacker.hasMixin("Defending")) {
       attacker.takeDamage(this, this.poisonStrength);
     }
@@ -176,9 +176,9 @@ App.Mixins.Defending.Poisonous = {
 //------------------------------
 // Attacking group:
 //------------------------------
-App.Mixins.Attacking = {};
+App.EntityMixins.Attacking = {};
 
-App.Mixins.Attacking.Attacker = {
+App.EntityMixins.Attacking.Attacker = {
   name:  'Attacker',
   group: 'Attacking',
   init:   function(template) {
@@ -198,9 +198,9 @@ App.Mixins.Attacking.Attacker = {
 // Messaging group:
 //------------------------------
 
-App.Mixins.Messaging = {};
+App.EntityMixins.Messaging = {};
 
-App.Mixins.Messaging.Receiver = {
+App.EntityMixins.Messaging.Receiver = {
   name:  'Receiver',
   group: 'Messaging',
   init:  function(template) {
@@ -217,9 +217,9 @@ App.Mixins.Messaging.Receiver = {
 //------------------------------
 // Seeing group:
 //------------------------------
-App.Mixins.Seeing = {};
+App.EntityMixins.Seeing = {};
 
-App.Mixins.Seeing.Sight = {
+App.EntityMixins.Seeing.Sight = {
   name:  'Sight',
   group: 'Seeing',
   init: function(template) {
@@ -230,9 +230,9 @@ App.Mixins.Seeing.Sight = {
 //------------------------------
 // Inventory group:
 //------------------------------
-App.Mixins.Inventory = {};
+App.EntityMixins.Inventory = {};
 
-App.Mixins.Inventory.Carrier = {
+App.EntityMixins.Inventory.Carrier = {
   name:  'Carrier',
   group: 'Inventory',
   init: function(template) {

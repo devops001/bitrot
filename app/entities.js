@@ -7,7 +7,7 @@ App.EntityRepository.define('fungus', {
   fg:      '#0f0',
   maxHP:   15,
   defense: 0,
-  mixins: [ App.Mixins.Acting.Fungus, App.Mixins.Defending.Defender ]
+  mixins: [ App.EntityMixins.Acting.Fungus, App.EntityMixins.Defending.Defender ]
 });
 
 App.EntityRepository.define("poisonousFungus", {
@@ -17,7 +17,7 @@ App.EntityRepository.define("poisonousFungus", {
   bg:      '#200',
   maxHP:   15,
   defense: 0,
-  mixins: [ App.Mixins.Acting.Fungus, App.Mixins.Defending.Poisonous ]
+  mixins: [ App.EntityMixins.Acting.Fungus, App.EntityMixins.Defending.Poisonous ]
 });
 
 App.EntityRepository.define("bat", {
@@ -28,8 +28,8 @@ App.EntityRepository.define("bat", {
   attackPower: 5,
   defense:     5,
   mixins: [
-    App.Mixins.Acting.Wanderer, App.Mixins.Moving.Walker,
-    App.Mixins.Defending.Defender, App.Mixins.Attacking.Attacker
+    App.EntityMixins.Acting.Wanderer, App.EntityMixins.Moving.Walker,
+    App.EntityMixins.Defending.Defender, App.EntityMixins.Attacking.Attacker
   ]
 });
 
@@ -41,8 +41,8 @@ App.EntityRepository.define("newt", {
   attackPower: 4,
   defense:     6,
   mixins: [
-    App.Mixins.Acting.Wanderer, App.Mixins.Moving.Walker,
-    App.Mixins.Defending.Defender, App.Mixins.Attacking.Attacker
+    App.EntityMixins.Acting.Wanderer, App.EntityMixins.Moving.Walker,
+    App.EntityMixins.Defending.Defender, App.EntityMixins.Attacking.Attacker
   ]
 });
 
@@ -54,7 +54,7 @@ App.EntityRepository.define("poisonousMole", {
   attackPower: 5,
   defense:     1,
   mixins: [
-    App.Mixins.Acting.Wanderer, App.Mixins.Moving.Digger,
-    App.Mixins.Defending.Poisonous, App.Mixins.Attacking.Attacker
+    App.EntityMixins.Acting.Wanderer, App.EntityMixins.Moving.Digger,
+    App.EntityMixins.Defending.Poisonous, App.EntityMixins.Attacking.Attacker
   ]
 });
