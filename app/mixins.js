@@ -278,20 +278,22 @@ App.Mixins.Inventory.Carrier = {
     return this.numEmptySlots().length>0;
   },
   pickupItems: function(indices) {
-    var items    = this.map.getItemsAt(this.x, this.y, this.z);
-    var leftOver = [];
+    var items     = this.map.getItemsAt(this.x, this.y, this.z);
+    var leftOver  = [];
+    var isTooFull = false;
     for (var i=0; i<items.length; i++) {
       var item = items[i];
       if (indices.indexOf(i)>-1) {
         if (!this.addItem(item)) {
           leftOver.push(item);
+          isTooFull = true;
         }
       } else {
         leftOver.push(item);
       }
     }
     this.map.setItemsAt(this.x, this.y, this.z, leftOver);
-    return leftOver.length==0;
+    return !isTooFull;
   },
   dropItem: function(index) {
     var item = this.getItem(index);

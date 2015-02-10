@@ -353,7 +353,14 @@ App.Screens.itemPickup = new App.Screens.ItemList({
   canSelect: true,
   canSelectMultiple: true,
   okFunction: function() {
-    if (!this.player.pickupItems(this.getSelectedIndices())) {
+    var selectedIndices = this.getSelectedIndices();
+    if (this.player.pickupItems(selectedIndices)) {
+      if (selectedIndices.length==1) {
+        App.sendMessage(this.player, "You pickup %s", [this.items[selectedIndices[0]].describeOne()]);
+      } else {
+        App.sendMessage(this.player, "You pickup several items");
+      }
+    } else {
       App.sendMessage(this.player, "Your inventory is too full!");
     }
     return true;
@@ -369,7 +376,13 @@ App.Screens.itemDrop = new App.Screens.ItemList({
   canSelect: true,
   canSelectMultiple: true,
   okFunction: function() {
-    this.player.dropItems(this.getSelectedIndices());
+    var selectedIndices = this.getSelectedIndices();
+    if (selectedIndices.length==1) {
+      App.sendMessage(this.player, "You drop %s", [this.items[selectedIndices[0]].describeOne()]);
+    } else {
+      App.sendMessage(this.player, "You drop several items");
+    }
+    this.player.dropItems(selectedIndices);
     return true;
   }
 });
