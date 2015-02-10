@@ -5,7 +5,6 @@
 
 App.ItemMixins.Edible = {
   name: 'Edible',
-  group: 'Edible',
   init: function(template) {
     this.foodValue    = template.foodValue    || '5';
     this.maxPortions  = template.maxPortions  || 1;
