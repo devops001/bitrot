@@ -12,6 +12,7 @@ App.ItemRepository.define('apple', {
   ch:   '%',
   fg:   '#f00',
   foodValue: 50,
+  maxPortions:  1,
   portionsLeft: 1,
   mixins: [App.ItemMixins.Edible]
 });
@@ -19,8 +20,9 @@ App.ItemRepository.define('apple', {
 App.ItemRepository.define('melon', {
   name: 'melon',
   ch:   '%',
-  fg:   '#00f',
+  fg:   '#0f0',
   foodValue: 35,
+  maxPortions:  4,
   portionsLeft: 4,
   mixins: [App.ItemMixins.Edible]
 });
