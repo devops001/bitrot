@@ -72,9 +72,13 @@ App.Screens.play = {
     }
 
     // stats:
+    var healthWidth = 12;
     var health = '%c{gray}%b{black}';
     health += vsprintf('hp: %d/%d ', [this.player.hp, this.player.maxHP]);
     display.drawText(0, App.height, health);
+
+    var hunger = this.player.getHungerDescription();
+    display.drawText(healthWidth, App.height, hunger);
 
     var level = '%c{gray}%b{black}';
     level += vsprintf('Level: %d', [this.player.z+1]);

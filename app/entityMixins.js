@@ -89,9 +89,12 @@ App.EntityMixins.Acting.Player = {
   name:  'Player',
   group: 'Acting',
   act: function() {
-    App.refresh();
     App.Screens.play.map.engine.lock();
     this.clearMessages();
+    if (this.hasMixin('Eating')) {
+      this.tickHunger();
+    }
+    App.refresh();
   }
 };
 
@@ -302,6 +305,46 @@ App.EntityMixins.Inventory.Carrier = {
   dropItems: function(indices) {
     for (var i=0; i<indices.length; i++) {
       this.dropItem(indices[i]);
+    }
+  }
+};
+
+//------------------------------
+// Eating group:
+//------------------------------
+App.EntityMixins.Eating = {};
+
+App.EntityMixins.Eating.Eater = {
+  name:  'Eater',
+  group: 'Eating',
+  init: function(template) {
+    this.maxFullness = template.maxFullness || 1000;
+    this.fullness    = template.fullness    || (this.maxFullness/2);
+    this.hungerRate  = template.hungerRate  || 1;
+  },
+  tickHunger: function() {
+    this.modifyFullness(-this.hungerRate);
+  },
+  modifyFullness: function(amount) {
+    this.fullness += amount;
+    if (this.fullness < 0) {
+      this.kill("You have starved to death!");
+    } else if (this.fullness > this.maxFullness) {
+      this.kill("You choked and died while overeating!")
+    }
+  },
+  getHungerDescription: function() {
+    var perPercent = this.maxFullness / 100;
+    if (this.fullness <= perPercent * 5) {
+      return "%c{red}%b{black}Starving";
+    } else if (this.fullness <= perPercent * 25) {
+      return "%c{white}%b{black}Hungry";
+    } else if (this.fullness >= perPercent * 95) {
+      return "%c{red}%b{black}Dangerously Full";
+    } else if (this.fullness >= perPercent * 75) {
+      return "%c{gray}%b{black}Full";
+    } else {
+      return "%c{gray}%b{black}Not Hungry";
     }
   }
 };
