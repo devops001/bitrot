@@ -92,7 +92,7 @@ App.Screens.play = {
     }
 
     this.player.clearMessages();
-    var shouldUnlock = true;
+    var tookTurn = true;
 
     switch(code) {
     case App.KEY_Enter:      App.switchScreen(App.Screens.win); break;
@@ -112,7 +112,7 @@ App.Screens.play = {
       } else {
         App.sendMessage(this.player, "You are not carrying anything");
         App.refresh();
-        shouldUnlock = false;
+        tookTurn = false;
       }
       break;
     // pickup:
@@ -122,7 +122,7 @@ App.Screens.play = {
       if (!items) {
         App.sendMessage(this.player, "There is nothing here to pickup");
         App.refresh();
-        shouldUnlock = false;
+        tookTurn = false;
       } else if (items.length == 1) {
         if (this.player.pickupItems([0])) {
           App.sendMessage(this.player, "You pickup %s", [items[0].describeOne()]);
@@ -140,15 +140,26 @@ App.Screens.play = {
       if (!this.player.hasItems()) {
         App.sendMessage(this.player, "You don't have anything to drop");
         App.refresh();
-        shouldUnlock = false;
+        tookTurn = false;
       } else {
         App.Screens.itemDrop.setup(this.player, this.player.getItems());
         this.setSubScreen(App.Screens.itemDrop);
       }
       break;
+    // eat:
+    case App.KEY_E:
+    case App.KEY_e:
+      var rt = App.Screens.eat.setup(this.player, this.player.getItems());
+      if (App.Screens.eat.setup(this.player, this.player.getItems()) > 0) {
+        this.setSubScreen(App.Screens.eat);
+      } else {
+        App.sendMessage(this.player, "You don't have anything to eat");
+        App.refresh();
+        tookTurn = false;
+      }
     }
 
-    if (shouldUnlock) {
+    if (tookTurn) {
       this.map.engine.unlock();
     }
   },
@@ -255,19 +266,33 @@ App.Screens.lose = {
 //-----------------------------
 
 App.Screens.ItemList = function(template) {
-  this.caption           = template.caption;
-  this.okFunction        = template.okFunction;
-  this.canSelect         = template.canSelect;
-  this.canSelectMultiple = template.canSelectMultiple;
+  this.caption             = template.caption;
+  this.okFunction          = template.okFunction;
+  this.canSelect           = template.canSelect;
+  this.canSelectMultiple   = template.canSelectMultiple;
+  this.includeItemFunction = template.includeItemFunction;
+  if (!this.includeItemFunction) {
+    this.includeItemFunction = function(item) { return true; };
+  }
 };
 
 App.Screens.ItemList.prototype.setup = function(player, items) {
   this.player   = player;
-  this.items    = items;
+  var _this = this;
+  var count = 0;
+  this.items = items.map(function(item) {
+    if (_this.includeItemFunction(item)) {
+      count++;
+      return item;
+    } else {
+      return null;
+    }
+  });
   this.selected = {};
   for (var i=0; i<items.length; i++) {
     this.selected[i] = false;
   }
+  return count;
 };
 
 App.Screens.ItemList.prototype.closeSubScreen = function() {
@@ -391,5 +416,31 @@ App.Screens.itemDrop = new App.Screens.ItemList({
     }
     this.player.dropItems(selectedIndices);
     return true;
+  }
+});
+
+//-----------------------------
+// eat subScreen:
+//-----------------------------
+
+App.Screens.eat = new App.Screens.ItemList({
+  caption: 'Choose an item to eat',
+  canSelect: true,
+  canSelectMultiple: false,
+  includeItemFunction: function(item) {
+    return item && item.hasMixin('Edible');
+  },
+  okFunction: function() {
+    // eat, then remove item if no portions left:
+    var selectedIndices = this.getSelectedIndices();
+    if (selectedIndices.length==1) {
+      var item = this.items[selectedIndices[0]];
+      App.sendMessage(this.player, "You eat %s", [item.describeThe()]);
+      item.eat(this.player);
+      if (item.portionsLeft < 1) {
+        this.player.removeItem(selectedIndices[0]);
+      }
+      return true;
+    }
   }
 });
