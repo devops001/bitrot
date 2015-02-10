@@ -152,13 +152,8 @@ App.Mixins.Defending.Defender = {
     this.hp -= amount;
     App.sendMessage(this, "You took %d damage from %s", [amount, attacker.name]);
     if (this.hp <= 0) {
-      App.sendMessage(attacker, "You killed %s", [this.name]);
-      App.sendMessage(this, "You died!");
-      if (this.hasMixin('Player')) {
-        App.switchScreen(App.Screens.lose);
-      } else {
-        this.map.removeEntity(this);
-      }
+      App.sendMessage(attacker, "You killed the %s", [this.name]);
+      this.kill();
     }
   }
 };

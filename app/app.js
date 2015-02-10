@@ -35,10 +35,10 @@ var App = {
     this.Tiles.stairsDown = new App.Tile({ch:'>', fg:'#fff', isWalkable:true, blocksLight:false});
   },
 
-  switchScreen: function(screen) {
+  switchScreen: function(screen, properties) {
     if (this.screen != null) { this.screen.exit(); }
     this.screen = screen;
-    this.screen.enter();
+    this.screen.enter(properties);
     this.refresh();
   },
 

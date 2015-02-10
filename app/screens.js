@@ -225,22 +225,25 @@ App.Screens.win = {
 //-----------------------------
 
 App.Screens.lose = {
-  enter: function() {
+  enter: function(properties) {
     console.log("entered Screen.lose");
+    properties   = properties || {};
+    this.message = properties.message || "%c{red}Lose Screen";
     App.display.setOptions({width:App.width, fontSize:14, fontSytle:"bold", bg:"#a00"});
   },
   exit: function() {
     console.log("exited Screen.lose");
   },
   render: function(display) {
-    display.drawText(1,1, "%c{red}Lose Screen");
+    display.drawText(1,1, this.message);
     display.drawText(1,2, "press [Enter] to play again");
   },
   handleInput: function(key) {
     if (key === App.KEY_Enter) {
       App.switchScreen(App.Screens.play);
     }
-  }
+  },
+
 };
 
 //-----------------------------
