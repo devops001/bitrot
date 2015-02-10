@@ -89,12 +89,12 @@ App.EntityMixins.Acting.Player = {
   name:  'Player',
   group: 'Acting',
   act: function() {
-    App.Screens.play.map.engine.lock();
-    this.clearMessages();
     if (this.hasMixin('Eating')) {
       this.tickHunger();
     }
     App.refresh();
+    App.Screens.play.map.engine.lock();
+    this.clearMessages();
   }
 };
 

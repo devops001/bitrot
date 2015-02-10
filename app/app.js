@@ -7,6 +7,7 @@ var App = {
   Screens:      {},
   Tiles:        {},
   EntityMixins: {},
+  ItemMixins:   {},
   Templates:    {},
 
   init: function() {
