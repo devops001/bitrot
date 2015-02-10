@@ -42,3 +42,8 @@ App.DynamicGlyph.prototype.describeOne = function(shouldCapitalize) {
   var prefix   = 'aeiou'.indexOf(first)<0 ? prefixes[0] : prefixes[1];
   return prefix +" "+ desc;
 };
+
+App.DynamicGlyph.prototype.describeThe = function(shouldCapitalize) {
+  var prefix = shouldCapitalize ? 'The' : 'the';
+  return prefix +' '+ this.describe();
+};
