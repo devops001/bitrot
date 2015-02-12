@@ -271,6 +271,7 @@ App.Screens.ItemList = function(template) {
   this.canSelect           = template.canSelect;
   this.canSelectMultiple   = template.canSelectMultiple;
   this.includeItemFunction = template.includeItemFunction;
+  this.addEmptyItemToList  = template.addEmptyItemToList;
   if (!this.includeItemFunction) {
     this.includeItemFunction = function(item) { return true; };
   }
@@ -302,6 +303,9 @@ App.Screens.ItemList.prototype.closeSubScreen = function() {
 
 App.Screens.ItemList.prototype.render = function(display) {
   display.drawText(0, 0, this.caption);
+  if (this.addEmptyItemToList) {
+    display.drawText(0,1, '0 - none');  // TODO: finish here
+  }
   var letters = 'abcdefghijklmnopqrstuvwxyz';
   var row     = 0;
   for (var i=0; i<this.items.length; i++) {
