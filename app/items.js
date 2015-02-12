@@ -4,13 +4,15 @@ App.ItemRepository = new App.Repository("items", App.Item);
 App.ItemRepository.define('rock', {
   name: 'rock',
   ch:   '*',
-  fg:   '#fff'
+  fg:   '#ccc',
+  bg:   '#332'
 });
 
 App.ItemRepository.define('apple', {
   name: 'apple',
-  ch:   '%',
+  ch:   '*',
   fg:   '#f00',
+  bg:   '#332',
   foodValue: 50,
   maxPortions:  1,
   portionsLeft: 1,
@@ -19,8 +21,9 @@ App.ItemRepository.define('apple', {
 
 App.ItemRepository.define('melon', {
   name: 'melon',
-  ch:   '%',
+  ch:   '*',
   fg:   '#0f0',
+  bg:   '#332',
   foodValue: 35,
   maxPortions:  4,
   portionsLeft: 4,
