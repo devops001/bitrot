@@ -284,6 +284,9 @@ App.EntityMixins.Inventory.Carrier = {
     return false;
   },
   removeItem: function(index) {
+    if (this.items[index] && this.hasMixin("Equipping")) {
+      this.unequip(this.items[index]);
+    }
     this.items[index] = null;
   },
   numEmptySlots: function() {
