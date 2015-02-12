@@ -1,6 +1,10 @@
 
 App.ItemRepository = new App.Repository("items", App.Item);
 
+//------------------------------
+// Other:
+//------------------------------
+
 App.ItemRepository.define('rock', {
   name: 'rock',
   ch:   '*',
@@ -8,6 +12,107 @@ App.ItemRepository.define('rock', {
   bg:   '#332',
   isRandomDrop: true
 });
+
+App.ItemRepository.define('corpse', {
+  name: 'corpse',
+  ch:   '%',
+  fg:   '#f00',
+  bg:   '#332',
+  isRandomDrop: false,
+  foodValue:    75,
+  maxPortions:   1,
+  portionsLeft:  1,
+  mixins: [App.ItemMixins.Edible]
+});
+
+//------------------------------
+// Weapons:
+//------------------------------
+
+App.ItemRepository.define('dagger', {
+  name: 'dagger',
+  ch:   ')',
+  fg:   '#888',
+  attackValue: 5,
+  isWieldable: true,
+  isRandomDrop: false,
+  mixins: [App.ItemMixins.Equippable]
+});
+
+App.ItemRepository.define('sword', {
+  name: 'sword',
+  ch:   ')',
+  fg:   '#88f',
+  bg:   '#332',
+  attackValue: 10,
+  isWieldable: true,
+  isRandomDrop: false,
+  mixins: [App.ItemMixins.Equippable]
+});
+
+App.ItemRepository.define('staff', {
+  name: 'staff',
+  ch:   ')',
+  fg:   '#f7f',
+  bg:   '#332',
+  attackValue:  3,
+  defendValue:  3,
+  isWieldable:  true,
+  isRandomDrop: false,
+  mixins: [App.ItemMixins.Equippable]
+})
+
+//------------------------------
+// Wearables:
+//------------------------------
+
+App.ItemRepository.define('tunic', {
+  name: 'tunic',
+  ch:   '[',
+  fg:   '#736342',
+  bg:   '#332',
+  defendValue:  2,
+  isWearable:   true,
+  isRandomDrop: false,
+  mixins: [App.ItemMixins.Equippable]
+});
+
+App.ItemRepository.define('jerkin', {
+  name: 'jerkin',
+  ch:   '[',
+  fg:   '#963896',
+  bg:   '#332',
+  defendValue:  4,
+  isWearable:   true,
+  isRandomDrop: false,
+  mixins: [App.ItemMixins.Equippable]
+});
+
+App.ItemRepository.define('chainmail', {
+  name: 'chainmail',
+  ch:   '[',
+  fg:   '#8347aa',
+  bg:   '#332',
+  defendValue:  8,
+  isWearable:   true,
+  isRandomDrop: false,
+  mixins: [App.ItemMixins.Equippable]
+});
+
+App.ItemRepository.define('platemail', {
+  name: 'platemail',
+  ch:   '[',
+  fg:   '#8347ff',
+  bg:   '#332',
+  defendValue:  12,
+  isWearable:   true,
+  isRandomDrop: false,
+  mixins: [App.ItemMixins.Equippable]
+});
+
+//------------------------------
+// Food:
+//------------------------------
 
 App.ItemRepository.define('apple', {
   name: 'apple',
@@ -30,17 +135,5 @@ App.ItemRepository.define('melon', {
   foodValue:    35,
   maxPortions:   4,
   portionsLeft:  4,
-  mixins: [App.ItemMixins.Edible]
-});
-
-App.ItemRepository.define('corpse', {
-  name: 'corpse',
-  ch:   '%',
-  fg:   '#f00',
-  bg:   '#332',
-  isRandomDrop: false,
-  foodValue:    75,
-  maxPortions:   1,
-  portionsLeft:  1,
   mixins: [App.ItemMixins.Edible]
 });

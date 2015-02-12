@@ -26,3 +26,17 @@ App.ItemMixins.Edible = {
     }
   }
 };
+
+//------------------------------
+// Equippable:
+//------------------------------
+
+App.ItemMixins.Equippable = {
+  name: 'Equippable',
+  init: function(template) {
+    this.attackValue = template.attackValue || 0;
+    this.defendValue = template.defendValue || 0;
+    this.isWieldable = template.isWieldable || false;
+    this.isWearable  = template.isWearable  || false;
+  }
+};

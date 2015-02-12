@@ -147,9 +147,9 @@ App.EntityMixins.Defending.Defender = {
   name:  'Defender',
   group: 'Defending',
   init:  function(template) {
-    this.maxHP   = template.maxHP   || 10;
-    this.hp      = template.hp      || this.maxHP;
-    this.defense = template.defense || 0;
+    this.maxHP    = template.maxHP   || 10;
+    this.hp       = template.hp      || this.maxHP;
+    this._defense = template.defense || 0;
   },
   takeDamage: function(attacker, amount) {
     this.hp -= amount;
@@ -161,6 +161,14 @@ App.EntityMixins.Defending.Defender = {
       }
       this.kill();
     }
+  },
+  getDefense: function() {
+    var modifier = 0;
+    if (this.hasMixin("Equipping")) {
+      modifier += this.weapon ? this.weapon.defendValue : 0;
+      modifier += this.armor  ? this.armor.defendValue  : 0;
+    }
+    return this._defense + modifier;
   }
 };
 
@@ -176,6 +184,9 @@ App.EntityMixins.Defending.Poisonous = {
     if (attacker.hasMixin("Defending")) {
       attacker.takeDamage(this, this.poisonStrength);
     }
+  },
+  getDefense: function() {
+    return App.EntityMixins.Defending.Defender.getDefense.call(this);
   }
 };
 
@@ -188,22 +199,29 @@ App.EntityMixins.Attacking.Attacker = {
   name:  'Attacker',
   group: 'Attacking',
   init:   function(template) {
-    this.attackPower = template.attackPower || 1;
+    this._attackPower = template.attackPower || 1;
   },
   attack: function(target) {
     if (target.hasMixin('Defending')) {
-      var power  = Math.max(0, this.attackPower - target.defense);
+      var power  = Math.max(0, this.getAttackPower() - target.getDefense());
       var damage = 1 + Math.floor(Math.random() * power);
       App.sendMessage(this, "You hit %s for %d damage", [target.name, damage]);
       target.takeDamage(this, damage);
     }
+  },
+  getAttackPower: function() {
+    var modifier = 0;
+    if (this.hasMixin("Equipping")) {
+      modifier += this.weapon ? this.weapon.attackValue : 0;
+      modifier += this.armor  ? this.armor.attackValue  : 0;
+    }
+    return this._attackPower + modifier;
   }
 };
 
 //------------------------------
 // Messaging group:
 //------------------------------
-
 App.EntityMixins.Messaging = {};
 
 App.EntityMixins.Messaging.Receiver = {
@@ -370,3 +388,37 @@ App.EntityMixins.CorpseDropping.CorpseDropper = {
     }
   }
 }
+
+//------------------------------
+// Equipping group:
+//------------------------------
+App.EntityMixins.Equipping = {};
+
+App.EntityMixins.Equipping.Equipper = {
+  name:  'Equipper',
+  group: 'Equipping',
+  init: function(template) {
+    this.weapon = null;
+    this.armor  = null;
+  },
+  wield: function(item) {
+    this.weapon = item;
+  },
+  unwield: function(item) {
+    this.weapon = null;
+  },
+  wear: function(item) {
+    this.armor = item;
+  },
+  takeOff: function(item) {
+    this.armor = null;
+  },
+  unequip: function(item) {
+    if (this.armor == item) {
+      this.takeOff(item);
+    }
+    if (this.weapon == item) {
+      this.unwield(item);
+    }
+  }
+};
