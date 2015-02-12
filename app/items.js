@@ -5,7 +5,8 @@ App.ItemRepository.define('rock', {
   name: 'rock',
   ch:   '*',
   fg:   '#ccc',
-  bg:   '#332'
+  bg:   '#332',
+  isRandomDrop: true
 });
 
 App.ItemRepository.define('apple', {
@@ -13,6 +14,7 @@ App.ItemRepository.define('apple', {
   ch:   '*',
   fg:   '#f00',
   bg:   '#332',
+  isRandomDrop: true,
   foodValue: 50,
   maxPortions:  1,
   portionsLeft: 1,
@@ -24,6 +26,7 @@ App.ItemRepository.define('melon', {
   ch:   '*',
   fg:   '#0f0',
   bg:   '#332',
+  isRandomDrop: true,
   foodValue: 35,
   maxPortions:  4,
   portionsLeft: 4,

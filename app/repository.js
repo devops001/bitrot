@@ -1,18 +1,27 @@
 
 App.Repository = function(name, constructor) {
-  this.name        = name;
-  this.constructor = constructor;
-  this.templates   = {};
+  this.name            = name;
+  this.constructor     = constructor;
+  this.templates       = {};
+  this.randomTemplates = {};
 };
 
-App.Repository.prototype.define = function(name, template) {
+App.Repository.prototype.define = function(name, template, options) {
   this.templates[name] = template;
+  if (options && options.isRandomDrop) {
+    this.randomTemplates[name] = template;
+  }
 };
 
-App.Repository.prototype.create = function(name) {
-  var template = this.templates[name];
-  if (!template) {
-    throw new Error("No template named '"+ name +"' in "+ this.name +" repository");
+App.Repository.prototype.create = function(name, overridingProperties) {
+  if (!this.templates[name]) {
+    throw new Error("No template named '"+ name +"' in the "+ this.name +" repository");
+  }
+  var template = Object.create(this.templates[name]);
+  if (overridingProperties) {
+    for (var key in overridingProperties) {
+      template[key] = overridingProperties[key];
+    }
   }
   return new this.constructor(template);
 };
