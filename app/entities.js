@@ -9,7 +9,10 @@ App.EntityRepository.define('fungus', {
   isRandomDrop: true,
   maxHP:   15,
   defense: 0,
-  mixins: [ App.EntityMixins.Acting.Fungus, App.EntityMixins.Defending.Defender ]
+  mixins: [
+    App.EntityMixins.Acting.Fungus,
+    App.EntityMixins.Defending.Defender
+  ]
 });
 
 App.EntityRepository.define("poisonousFungus", {
@@ -20,7 +23,10 @@ App.EntityRepository.define("poisonousFungus", {
   isRandomDrop: true,
   maxHP:   15,
   defense: 0,
-  mixins: [ App.EntityMixins.Acting.Fungus, App.EntityMixins.Defending.Poisonous ]
+  mixins: [
+    App.EntityMixins.Acting.Fungus,
+    App.EntityMixins.Defending.Poisonous
+  ]
 });
 
 App.EntityRepository.define("bat", {
@@ -33,8 +39,11 @@ App.EntityRepository.define("bat", {
   attackPower: 5,
   defense:     5,
   mixins: [
-    App.EntityMixins.Acting.Wanderer, App.EntityMixins.Moving.Walker,
-    App.EntityMixins.Defending.Defender, App.EntityMixins.Attacking.Attacker
+    App.EntityMixins.Acting.Wanderer,
+    App.EntityMixins.Moving.Walker,
+    App.EntityMixins.Defending.Defender,
+    App.EntityMixins.Attacking.Attacker,
+    App.EntityMixins.CorpseDropping.CorpseDropper
   ]
 });
 
@@ -48,8 +57,11 @@ App.EntityRepository.define("newt", {
   attackPower: 4,
   defense:     6,
   mixins: [
-    App.EntityMixins.Acting.Wanderer, App.EntityMixins.Moving.Walker,
-    App.EntityMixins.Defending.Defender, App.EntityMixins.Attacking.Attacker
+    App.EntityMixins.Acting.Wanderer,
+    App.EntityMixins.Moving.Walker,
+    App.EntityMixins.Defending.Defender,
+    App.EntityMixins.Attacking.Attacker,
+    App.EntityMixins.CorpseDropping.CorpseDropper
   ]
 });
 
@@ -63,7 +75,10 @@ App.EntityRepository.define("poisonousMole", {
   attackPower: 5,
   defense:     1,
   mixins: [
-    App.EntityMixins.Acting.Wanderer, App.EntityMixins.Moving.Digger,
-    App.EntityMixins.Defending.Poisonous, App.EntityMixins.Attacking.Attacker
+    App.EntityMixins.Acting.Wanderer,
+    App.EntityMixins.Moving.Digger,
+    App.EntityMixins.Defending.Poisonous,
+    App.EntityMixins.Attacking.Attacker,
+    App.EntityMixins.CorpseDropping.CorpseDropper
   ]
 });

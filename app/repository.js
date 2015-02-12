@@ -6,9 +6,9 @@ App.Repository = function(name, constructor) {
   this.randomTemplates = {};
 };
 
-App.Repository.prototype.define = function(name, template, options) {
+App.Repository.prototype.define = function(name, template) {
   this.templates[name] = template;
-  if (options && options.isRandomDrop) {
+  if (template.isRandomDrop) {
     this.randomTemplates[name] = template;
   }
 };
@@ -27,5 +27,5 @@ App.Repository.prototype.create = function(name, overridingProperties) {
 };
 
 App.Repository.prototype.createRandom = function() {
-  return this.create(Object.keys(this.templates).random());
+  return this.create(Object.keys(this.randomTemplates).random());
 };

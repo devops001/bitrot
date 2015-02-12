@@ -15,9 +15,9 @@ App.ItemRepository.define('apple', {
   fg:   '#f00',
   bg:   '#332',
   isRandomDrop: true,
-  foodValue: 50,
-  maxPortions:  1,
-  portionsLeft: 1,
+  foodValue:    50,
+  maxPortions:   1,
+  portionsLeft:  1,
   mixins: [App.ItemMixins.Edible]
 });
 
@@ -27,8 +27,20 @@ App.ItemRepository.define('melon', {
   fg:   '#0f0',
   bg:   '#332',
   isRandomDrop: true,
-  foodValue: 35,
-  maxPortions:  4,
-  portionsLeft: 4,
+  foodValue:    35,
+  maxPortions:   4,
+  portionsLeft:  4,
+  mixins: [App.ItemMixins.Edible]
+});
+
+App.ItemRepository.define('corpse', {
+  name: 'corpse',
+  ch:   '%',
+  fg:   '#f00',
+  bg:   '#332',
+  isRandomDrop: false,
+  foodValue:    75,
+  maxPortions:   1,
+  portionsLeft:  1,
   mixins: [App.ItemMixins.Edible]
 });

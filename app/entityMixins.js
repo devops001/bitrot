@@ -156,6 +156,9 @@ App.EntityMixins.Defending.Defender = {
     App.sendMessage(this, "You took %d damage from %s", [amount, attacker.name]);
     if (this.hp <= 0) {
       App.sendMessage(attacker, "You killed the %s", [this.name]);
+      if (this.hasMixin("CorpseDropper")) {
+        this.dropCorpse();
+      }
       this.kill();
     }
   }
@@ -348,3 +351,22 @@ App.EntityMixins.Eating.Eater = {
     }
   }
 };
+
+//------------------------------
+// CorpseDropping group:
+//------------------------------
+App.EntityMixins.CorpseDropping = {};
+
+App.EntityMixins.CorpseDropping.CorpseDropper = {
+  name:  'CorpseDropper',
+  group: 'Dropping',
+  init: function(template) {
+    this.corpseDropRate = template.corpseDropRate || 100;
+  },
+  dropCorpse: function() {
+    if (Math.round(Math.random()*100) < this.corpseDropRate) {
+      var corpse = App.ItemRepository.create('corpse', {name:this.name+" corpse"});
+      this.map.addItem(this.x, this.y, this.z, corpse);
+    }
+  }
+}
