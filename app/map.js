@@ -29,6 +29,9 @@ App.Map.prototype.populateLevels = function() {
       this.addItemAtRandPos(App.ItemRepository.createRandom(), z);
     }
   }
+  // unique items:
+  var z = randIntFromRange(0, this.depth-1);
+  this.addItemAtRandPos(App.ItemRepository.create('pumpkin'), z);
 };
 
 App.Map.prototype.initFov = function() {

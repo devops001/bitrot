@@ -418,10 +418,10 @@ App.EntityMixins.Equipping.Equipper = {
   },
   unequip: function(item) {
     if (this.armor == item) {
-      this.takeOff(item);
+      this.takeOffArmor(item);
     }
     if (this.weapon == item) {
-      this.unwield(item);
+      this.unwieldWeapon(item);
     }
   }
 };

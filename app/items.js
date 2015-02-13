@@ -24,6 +24,23 @@ App.ItemRepository.define('corpse', {
   mixins: [App.ItemMixins.Edible]
 });
 
+// can be wielded, worn, and eaten:
+App.ItemRepository.define('pumpkin', {
+  name: 'pumpkin',
+  ch:   '*',
+  fg:   'orange',
+  bg:   '#332',
+  isRandomDrop: false,
+  foodValue: 25,
+  maxPortions: 5,
+  portionsLeft: 5,
+  attackValue: 1,
+  defendValue: 1,
+  isWieldable: true,
+  isWearable:  true,
+  mixins: [App.ItemMixins.Edible, App.ItemMixins.Equippable]
+});
+
 //------------------------------
 // Weapons:
 //------------------------------
