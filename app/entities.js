@@ -42,7 +42,7 @@ App.EntityRepository.define("bat", {
   attackPower: 5,
   defense:     5,
   mixins: [
-    App.EntityMixins.Acting.Wanderer,
+    App.EntityMixins.Acting.TaskActor,
     App.EntityMixins.Moving.Walker,
     App.EntityMixins.Defending.Defender,
     App.EntityMixins.Attacking.Attacker,
@@ -61,7 +61,7 @@ App.EntityRepository.define("newt", {
   attackPower: 4,
   defense:     6,
   mixins: [
-    App.EntityMixins.Acting.Wanderer,
+    App.EntityMixins.Acting.TaskActor,
     App.EntityMixins.Moving.Walker,
     App.EntityMixins.Defending.Defender,
     App.EntityMixins.Attacking.Attacker,
@@ -80,7 +80,7 @@ App.EntityRepository.define("poisonousMole", {
   attackPower: 5,
   defense:     1,
   mixins: [
-    App.EntityMixins.Acting.Wanderer,
+    App.EntityMixins.Acting.TaskActor,
     App.EntityMixins.Moving.Digger,
     App.EntityMixins.Defending.Poisonous,
     App.EntityMixins.Attacking.Attacker,

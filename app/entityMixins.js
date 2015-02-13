@@ -125,18 +125,67 @@ App.EntityMixins.Acting.Fungus = {
   }
 };
 
-App.EntityMixins.Acting.Wanderer = {
-  name: 'Wanderer',
+App.EntityMixins.Acting.TaskActor = {
+  name: 'TaskActor',
   group: 'Acting',
+  init: function(template) {
+    this.tasks = template.tasks || ['wander'];
+  },
   act: function() {
-    var dir = (Math.round(Math.random())===1) ? 1 : -1;
-    if (Math.round(Math.random())===1) {
+    for (var i=0; i<this.tasks.length; i++) {
+      if (this.canDoTask(this.tasks[i])) {
+        this[this.tasks[i]]();
+        return;
+      }
+    }
+  },
+  canDoTask: function(task) {
+    if (task == 'hunt') {
+      return this.hasMixin('Seeing') && this.canSee(this.map.player);
+    } else if (task == 'wander') {
+      return true;
+    } else {
+      throw new Error("canDoTask(): unknown task: " + task);
+    }
+  },
+  wander: function() {
+    if (!this.hasMixin("Moving")) {
+      return;
+    }
+    var dir = randBool() ? 1 : -1;
+    if (randBool()) {
       this.tryMove(this.x+dir, this.y, this.z, this.map);
     } else {
       this.tryMove(this.x, this.y+dir, this.z, this.map);
     }
+  },
+  hunt: function() {
+    var player   = this.map.player;
+    var distance = Math.abs(player.x-this.x) + Math.abs(player.y-this.y);
+    if (distance === 1) {
+      if (this.hasMixin('Attacking')) {
+        this.attack(player);
+        return;
+      }
+    }
+    var thisEntity = this;
+    var path = new ROT.Path.AStar(player.x, player.y, function(x,y) {
+      var entity = thisEntity.map.getEntityAt(x,y,thisEntity.z);
+      if (entity && entity!==thisEntity && entity!==player) {
+        return false;
+      }
+      return thisEntity.map.getTile(x,y,z).isWalkable;
+    },{topology:4});
+    // first pos in path is this entity's position:
+    var count = 0;
+    path.compute(thisEntity.x, thisEntity.y, function(x, y) {
+      if (count === 1) {
+        thisEntity.tryMove(x, y, thisEntity.z);
+      }
+      count++;
+    });
   }
-}
+};
 
 //------------------------------
 // Defending group:
@@ -247,7 +296,29 @@ App.EntityMixins.Seeing.Sight = {
   name:  'Sight',
   group: 'Seeing',
   init: function(template) {
-    this.sightRadius = template.sightRadius || 5;
+    this.sightRadius = template.sightRadius || 10;
+  },
+  canSee: function(entity) {
+    if (!entity || entity.map != this.map || entity.z != this.z) {
+      return false;
+    }
+    // check squared distance against squared radius:
+    var squaredX = (entity.x-this.x) * (entity.x-this.x);
+    var squaredY = (entity.y-this.y) * (entity.y-this.y);
+    var squaredDistance = squaredX + squaredY;
+    var squaredRadius   = this.sighRadius * this.sightRadius;
+    if (squaredDistance > squaredRadius) {
+      return false;
+    }
+    // compute the FOV
+    var found = false;
+    var cb = function(x,y,radius,visibility) {
+      if (entity.x == x && entity.y == y) {
+        found = true;
+      }
+    };
+    this.map.fov[this.z].compute(this.x,this.y,this.sightRadius,cb);
+    return found;
   }
 };
 
