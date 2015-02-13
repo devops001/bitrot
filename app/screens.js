@@ -104,7 +104,6 @@ App.Screens.play = {
     case App.KEY_DownArrow:  this.move(0, 1,0); break;
     case App.KEY_UpArrow:    this.move(0,-1,0); break;
     // inventory:
-    case App.KEY_I:
     case App.KEY_i:
       if (this.player.hasItems()) {
         App.Screens.inventory.setup(this.player, this.player.getItems());
@@ -116,7 +115,6 @@ App.Screens.play = {
       }
       break;
     // pickup:
-    case App.KEY_G:
     case App.KEY_g:
       var items = this.map.getItemsAt(this.player.x, this.player.y, this.player.z);
       if (!items) {
@@ -135,7 +133,6 @@ App.Screens.play = {
       }
       break;
     // drop:
-    case App.KEY_D:
     case App.KEY_d:
       if (!this.player.hasItems()) {
         App.sendMessage(this.player, "You don't have anything to drop");
@@ -147,9 +144,7 @@ App.Screens.play = {
       }
       break;
     // eat:
-    case App.KEY_E:
     case App.KEY_e:
-      var rt = App.Screens.eat.setup(this.player, this.player.getItems());
       if (App.Screens.eat.setup(this.player, this.player.getItems()) > 0) {
         this.setSubScreen(App.Screens.eat);
       } else {
@@ -157,6 +152,20 @@ App.Screens.play = {
         App.refresh();
         tookTurn = false;
       }
+      break;
+    case App.KEY_w:
+      // includes an empty item, so test if 2 ore more items exist:
+      if (App.Screens.wield.setup(this.player, this.player.getItems()) > 1) {
+        this.setSubScreen(App.Screens.wield);
+      } else {
+        App.sendMessage(this.player, "You don't have any weapons to wield");
+        App.refresh();
+        tookTurn = false;
+      }
+      break;
+    default:
+      console.log("unknown key code: ", code);
+      tookTurn = false;
     }
 
     if (tookTurn) {
@@ -256,6 +265,8 @@ App.Screens.lose = {
   handleInput: function(key) {
     if (key === App.KEY_Enter) {
       App.switchScreen(App.Screens.play);
+    } else {
+      console.log("key: ", key);
     }
   },
 
@@ -278,10 +289,10 @@ App.Screens.ItemList = function(template) {
 };
 
 App.Screens.ItemList.prototype.setup = function(player, items) {
-  this.player   = player;
-  var _this = this;
-  var count = 0;
-  this.items = items.map(function(item) {
+  this.player = player;
+  var _this   = this;
+  var count   = 0;
+  this.items  = items.map(function(item) {
     if (_this.includeItemFunction(item)) {
       count++;
       return item;
@@ -289,8 +300,12 @@ App.Screens.ItemList.prototype.setup = function(player, items) {
       return null;
     }
   });
+  if (this.addEmptyItemToList) {
+    this.items.unshift(App.ItemRepository.create('none'));
+    count++;
+  }
   this.selected = {};
-  for (var i=0; i<items.length; i++) {
+  for (var i=0; i<this.items.length; i++) {
     this.selected[i] = false;
   }
   return count;
@@ -302,17 +317,20 @@ App.Screens.ItemList.prototype.closeSubScreen = function() {
 };
 
 App.Screens.ItemList.prototype.render = function(display) {
-  display.drawText(0, 0, this.caption);
-  if (this.addEmptyItemToList) {
-    display.drawText(0,1, '0 - none');  // TODO: finish here
-  }
   var letters = 'abcdefghijklmnopqrstuvwxyz';
-  var row     = 0;
+  display.drawText(0, 0, this.caption);
+  var row = 0;
   for (var i=0; i<this.items.length; i++) {
-    if (this.items[i]) {
+    var item = this.items[i];
+    if (item) {
       var letter = letters.substring(i,i+1);
       var state  = (this.canSelectMultiple && this.selected[i]) ? '+' : '-';
-      var line   = letter +' '+ state +' '+ this.items[i].describe();
+      var line   = letter +' '+ state +' '+ item.describe();
+      if (item === this.player.armor) {
+        line += " (wearing)";
+      } else if (item === this.player.weapon) {
+        line += " (wielding)";
+      }
       display.drawText(0, 2+row, line);
       row++;
     }
@@ -446,5 +464,35 @@ App.Screens.eat = new App.Screens.ItemList({
       }
       return true;
     }
+  }
+});
+
+//-----------------------------
+// wield subScreen:
+//-----------------------------
+
+App.Screens.wield = new App.Screens.ItemList({
+  caption: 'Choose a weapon to wield',
+  canSelect: true,
+  canSelectMultiple: false,
+  addEmptyItemToList: true,
+  includeItemFunction: function(item) {
+    return item && item.isWieldable;
+  },
+  okFunction: function() {
+    var selectedIndices = this.getSelectedIndices();
+    if (selectedIndices.length!=1 || selectedIndices[0]==0) {
+      var weapon = this.player.weapon;
+      this.player.unwield();
+      if (weapon) {
+        App.sendMessage(this.player, "You unwield %s", [weapon.describeThe()]);
+      }
+    } else {
+      var item = this.items[selectedIndices[0]];
+      this.player.unequip(item);
+      this.player.wield(item);
+      App.sendMessage(this.player, "You wield %s", [item.describeThe()]);
+    }
+    return true;
   }
 });

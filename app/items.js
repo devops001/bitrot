@@ -5,12 +5,11 @@ App.ItemRepository = new App.Repository("items", App.Item);
 // Other:
 //------------------------------
 
-App.ItemRepository.define('rock', {
-  name: 'rock',
-  ch:   '*',
-  fg:   '#ccc',
-  bg:   '#332',
-  isRandomDrop: true
+// for selecting 'none' in item list screens (ex: choose weapon):
+App.ItemRepository.define('none', {
+  name: 'none',
+  ch:   ' ',
+  isRandomDrop: false
 });
 
 App.ItemRepository.define('corpse', {
@@ -28,6 +27,17 @@ App.ItemRepository.define('corpse', {
 //------------------------------
 // Weapons:
 //------------------------------
+
+App.ItemRepository.define('rock', {
+  name: 'rock',
+  ch:   '*',
+  fg:   '#ccc',
+  bg:   '#332',
+  attackValue: 1,
+  isWieldable: true,
+  isRandomDrop: true,
+  mixins: [App.ItemMixins.Equippable]
+});
 
 App.ItemRepository.define('dagger', {
   name: 'dagger',
