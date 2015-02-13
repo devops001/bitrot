@@ -4,6 +4,7 @@ App.Templates.player = {
   ch:             '@',
   fg:             '#fff',
   bg:             '#000',
+  speed:          1000,
   maxHP:          40,
   defense:         0,
   attackPower:    10,

@@ -2,9 +2,10 @@
 App.Entity = function(properties) {
   properties = properties || {};
   App.DynamicGlyph.call(this, properties);
-  this.x       = properties.x || 0;
-  this.y       = properties.y || 0;
-  this.z       = properties.z || 0;
+  this.x       = properties.x     || 0;
+  this.y       = properties.y     || 0;
+  this.z       = properties.z     || 0;
+  this.speed   = properties.speed || 1000;
   this.map     = null;
   this.isAlive = true;
 };
@@ -33,4 +34,9 @@ App.Entity.prototype.kill = function(message) {
   } else {
     this.map.removeEntity(this);
   }
+};
+
+// required by the ROT.Scheduler.Speed() object:
+App.Entity.prototype.getSpeed = function() {
+  return this.speed;
 };
