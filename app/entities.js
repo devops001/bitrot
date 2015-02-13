@@ -87,3 +87,24 @@ App.EntityRepository.define("poisonousMole", {
     App.EntityMixins.CorpseDropping.CorpseDropper
   ]
 });
+
+App.EntityRepository.define("kobold", {
+  name:  'kobold',
+  ch:    'k',
+  fg:    '#83cd9a',
+  bg:    '#332',
+  speed: 1000,
+  isRandomDrop: true,
+  maxHP:        20,
+  attackPower:  5,
+  defense:      5,
+  tasks:  ['hunt','wander'],
+  mixins: [
+    App.EntityMixins.Acting.TaskActor,
+    App.EntityMixins.Seeing.Sight,
+    App.EntityMixins.Moving.Walker,
+    App.EntityMixins.Defending.Defender,
+    App.EntityMixins.Attacking.Attacker,
+    App.EntityMixins.CorpseDropping.CorpseDropper
+  ]
+});
