@@ -76,6 +76,18 @@ App.ItemRepository.define('staff', {
 // Wearables:
 //------------------------------
 
+App.ItemRepository.define('bloody shirt', {
+  name: 'bloody shirt',
+  ch:   '[',
+  fg:   '#ff3344',
+  bg:   '#332',
+  attackValue: 0,
+  defendValue: 1,
+  isWearable: true,
+  isRandomDrop: true,
+  mixins: [App.ItemMixins.Equippable]
+});
+
 App.ItemRepository.define('tunic', {
   name: 'tunic',
   ch:   '[',

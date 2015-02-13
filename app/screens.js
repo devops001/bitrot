@@ -163,6 +163,16 @@ App.Screens.play = {
         tookTurn = false;
       }
       break;
+    case App.KEY_W:
+      // includes an empty item, so test if 2 ore more items exist:
+      if (App.Screens.wear.setup(this.player, this.player.getItems()) > 1) {
+        this.setSubScreen(App.Screens.wear);
+      } else {
+        App.sendMessage(this.player, "You don't have armor to wear");
+        App.refresh();
+        tookTurn = false;
+      }
+      break;
     default:
       console.log("unknown key code: ", code);
       tookTurn = false;
@@ -483,8 +493,8 @@ App.Screens.wield = new App.Screens.ItemList({
     var selectedIndices = this.getSelectedIndices();
     if (selectedIndices.length!=1 || selectedIndices[0]==0) {
       var weapon = this.player.weapon;
-      this.player.unwield();
       if (weapon) {
+        this.player.unwieldWeapon();
         App.sendMessage(this.player, "You unwield %s", [weapon.describeThe()]);
       }
     } else {
@@ -492,6 +502,36 @@ App.Screens.wield = new App.Screens.ItemList({
       this.player.unequip(item);
       this.player.wield(item);
       App.sendMessage(this.player, "You wield %s", [item.describeThe()]);
+    }
+    return true;
+  }
+});
+
+//-----------------------------
+// wear subScreen:
+//-----------------------------
+
+App.Screens.wear = new App.Screens.ItemList({
+  caption: 'Choose something to wear',
+  canSelect: true,
+  canSelectMultiple: false,
+  addEmptyItemToList: true,
+  includeItemFunction: function(item) {
+    return item && item.isWearable;
+  },
+  okFunction: function() {
+    var selectedIndices = this.getSelectedIndices();
+    if (selectedIndices.length!=1 || selectedIndices[0]==0) {
+      var armor = this.player.armor;
+      if (armor) {
+        this.player.takeOffArmor();
+        App.sendMessage(this.player, "You remove %s", [armor.describeThe()]);
+      }
+    } else {
+      var item = this.items[selectedIndices[0]];
+      this.player.unequip(item);
+      this.player.wear(item);
+      App.sendMessage(this.player, "You wear %s", [item.describeThe()]);
     }
     return true;
   }

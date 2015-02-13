@@ -407,13 +407,13 @@ App.EntityMixins.Equipping.Equipper = {
   wield: function(item) {
     this.weapon = item;
   },
-  unwield: function(item) {
+  unwieldWeapon: function() {
     this.weapon = null;
   },
   wear: function(item) {
     this.armor = item;
   },
-  takeOff: function(item) {
+  takeOffArmor: function() {
     this.armor = null;
   },
   unequip: function(item) {
