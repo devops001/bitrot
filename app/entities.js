@@ -114,3 +114,24 @@ App.EntityRepository.define("kobold", {
     App.EntityMixins.CorpseDropping.CorpseDropper
   ]
 });
+
+App.EntityRepository.define("orc", {
+  name: 'orc',
+  ch:   'o',
+  fg:   '#34ff34',
+  bg:   '#332',
+  speed: 1000,
+  isRandomDrop: true,
+  maxHP:  20,
+  attackPower: 10,
+  defense:      5,
+  tasks: ['hunt','wander'],
+  mixins: [
+    App.EntityMixins.Acting.TaskActor,
+    App.EntityMixins.Seeing.Sight,
+    App.EntityMixins.Moving.Walker,
+    App.EntityMixins.Defending.Defender,
+    App.EntityMixins.Attacking.Attacker,
+    App.EntityMixins.CorpseDropping.CorpseDropper
+  ]
+});

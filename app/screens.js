@@ -10,7 +10,7 @@ App.Screens.play = {
 
   enter: function() {
     console.log("entered Screen.play");
-    App.display.setOptions({fontSize:20, fontSytle:"bold", bg:"#000"});
+    App.display.setOptions({fontSize:32, fontSytle:"bold", bg:"#000"});
     var mapDepth  = 3;
     var mapWidth  = 50;
     var mapHeight = 50;
@@ -21,6 +21,10 @@ App.Screens.play = {
   },
 
   exit: function() {
+    this.map.engine.lock();
+    this.player    = null;
+    this.map       = null;
+    this.subScreen = null;
     console.log("exited Screen.play");
   },
 

@@ -220,7 +220,6 @@ App.EntityMixins.Defending.Defender = {
     return this._defense + modifier;
   },
   heal: function(amount, healSource) {
-    console.log("heal: "+ amount);
     if (this.hp == this.maxHP) {
       return;
     }
