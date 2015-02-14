@@ -41,8 +41,10 @@ App.EntityRepository.define("bat", {
   maxHP:       5,
   attackPower: 5,
   defense:     5,
+  tasks: ['hunt','wander'],
   mixins: [
     App.EntityMixins.Acting.TaskActor,
+    App.EntityMixins.Seeing.Sight,
     App.EntityMixins.Moving.Walker,
     App.EntityMixins.Defending.Defender,
     App.EntityMixins.Attacking.Attacker,
@@ -60,8 +62,10 @@ App.EntityRepository.define("newt", {
   maxHP:       5,
   attackPower: 4,
   defense:     6,
+  tasks: ['hunt','wander'],
   mixins: [
     App.EntityMixins.Acting.TaskActor,
+    App.EntityMixins.Seeing.Sight,
     App.EntityMixins.Moving.Walker,
     App.EntityMixins.Defending.Defender,
     App.EntityMixins.Attacking.Attacker,
@@ -79,8 +83,10 @@ App.EntityRepository.define("poisonousMole", {
   maxHP:       10,
   attackPower: 5,
   defense:     1,
+  tasks: ['hunt','wander'],
   mixins: [
     App.EntityMixins.Acting.TaskActor,
+    App.EntityMixins.Seeing.Sight,
     App.EntityMixins.Moving.Digger,
     App.EntityMixins.Defending.Poisonous,
     App.EntityMixins.Attacking.Attacker,
