@@ -218,6 +218,23 @@ App.EntityMixins.Defending.Defender = {
       modifier += this.armor  ? this.armor.defendValue  : 0;
     }
     return this._defense + modifier;
+  },
+  heal: function(amount, healSource) {
+    console.log("heal: "+ amount);
+    if (this.hp == this.maxHP) {
+      return;
+    }
+    if (this.hp+amount > this.maxHP) {
+      amount  = this.maxHP - this.hp;
+      this.hp = this.maxHP;
+    } else {
+      this.hp += amount;
+    }
+    if (healSource) {
+      App.sendMessage(this, "You healed %d from %s", [amount, healSource]);
+    } else {
+      App.sendMessage(this, "You healed %d", [amount]);
+    }
   }
 };
 

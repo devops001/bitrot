@@ -15,6 +15,9 @@ App.ItemMixins.Edible = {
       if (this.portionsLeft > 0) {
         entity.modifyFullness(this.foodValue);
         this.portionsLeft--;
+        if (entity.hasMixin('Defending')) {
+          entity.heal(Math.round(this.foodValue/5), "eating");
+        }
       }
     }
   },
