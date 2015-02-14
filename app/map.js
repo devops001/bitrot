@@ -8,6 +8,7 @@ App.Map = function(tiles, player) {
   this.explored  = [];
   this.entities  = {};
   this.items     = {};
+  this.player    = player;
   this.scheduler = new ROT.Scheduler.Speed();
   this.engine    = new ROT.Engine(this.scheduler);
   this.addEntityAtRandPos(player, 0);

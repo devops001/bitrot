@@ -174,13 +174,13 @@ App.EntityMixins.Acting.TaskActor = {
       if (entity && entity!==thisEntity && entity!==player) {
         return false;
       }
-      return thisEntity.map.getTile(x,y,z).isWalkable;
+      return thisEntity.map.getTile(x,y,thisEntity.z).isWalkable;
     },{topology:4});
     // first pos in path is this entity's position:
     var count = 0;
     path.compute(thisEntity.x, thisEntity.y, function(x, y) {
       if (count === 1) {
-        thisEntity.tryMove(x, y, thisEntity.z);
+        thisEntity.tryMove(x, y, thisEntity.z, thisEntity.map);
       }
       count++;
     });
